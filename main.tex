@@ -131,42 +131,30 @@ Overflow = Zugewiesene oder berechnete Zahl liegt außerhalb des darstellbaren B
     \item \algo{Wichtig}: \textit{Jede Definition ist auch eine Deklaration!}
 \end{itemize}
 
-\section{String API}
+\section{String und Vector API}
 
 \noindent
-\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
 \toprule
-\textbf{Methode} & \textbf{Beschreibung} \\
+\textbf{Typ} & \textbf{Methode} & \textbf{Beschreibung} \\
 \midrule
-\lstinline|.length()| & Gibt die Länge des Strings zurück \\
-\lstinline|.empty()| & Prüft, ob der String leer ist \\
-\lstinline|.clear()| & Löscht den Inhalt des Strings \\
-\lstinline|.append(str)| & Fügt den String \lstinline|str| an das Ende an (+=) \\
-\lstinline|.at(idx)| & Gibt das Zeichen an der Position \lstinline|idx| zurück ([index]) \\
-\lstinline|.substr(start, len)| & Gibt einen Teilstring ab \lstinline|start| mit Länge \lstinline|len| zurück \\
-\lstinline|.find(str)| & Sucht nach \lstinline|str| und gibt die Startposition zurück \\
-\bottomrule
-\end{tabularx}
-
-\section{Vector API}
-
-\noindent
-\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
-\toprule
-\textbf{Methode} & \textbf{Beschreibung} \\
-\midrule
-\lstinline|.size()| & Gibt die Anzahl der Elemente im Vektor zurück \\
-\lstinline|.empty()| & Prüft, ob der Vektor leer ist \\
-\lstinline|.clear()| & Entfernt alle Elemente aus dem Vektor \\
-\lstinline|.push_back(val)| & Fügt das Element \lstinline|val| am Ende des Vektors hinzu \\
-\lstinline|.pop_back()| & Entfernt das letzte Element des Vektors \\
-\lstinline|.at(idx)| & Gibt das Element an der Position \lstinline|idx| zurück \\
-\lstinline|.front() / .back()| & Gibt das erste/letzte Element des Vektors zurück \\
-\lstinline|.begin() / .end()| & Gibt Iteratoren auf den Anfang/Ende des Vektors zurück \\
+\texttt{string/vector} & \lstinline|.size()| / \lstinline|.length()| & Gibt die Anzahl der Elemente bzw. die Länge zurück \\
+\texttt{string/vector} & \lstinline|.empty()| & Prüft, ob leer \\
+\texttt{string/vector} & \lstinline|.clear()| & Löscht den Inhalt \\
+\texttt{string} & \lstinline|.append(str)| & Fügt \lstinline|str| am Ende an (auch \lstinline|+=| möglich) \\
+\texttt{vector} & \lstinline|.push_back(val)| & Fügt \lstinline|val| am Ende hinzu \\
+\texttt{vector} & \lstinline|.pop_back()| & Entfernt das letzte Element \\
+\texttt{string/vector} & \lstinline|.at(idx)| & Gibt Element/Zei­chen an Position \lstinline|idx| zurück \\
+\texttt{string/vector} & \lstinline|.front() / .back()| & Erstes/letztes Element zurückgeben \\
+\texttt{string/vector} & \lstinline|.begin() / .end()| & Iteratoren auf Anfang/Ende \\
+\texttt{string} & \lstinline|.substr(start, len)| & Teilstring ab \lstinline|start| mit Länge \lstinline|len| \\
+\texttt{string} & \lstinline|.find(str)| & Sucht nach \lstinline|str| und gibt Startposition zurück \\
 \bottomrule
 \end{tabularx}
 
 \section{Nützliche std:: Funktionen}
+Benötigt \lstinline|#include <algorithm>| und \lstinline|#include <functional>|
+\newline 
 \newline 
 \noindent
 \begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
@@ -181,9 +169,9 @@ Overflow = Zugewiesene oder berechnete Zahl liegt außerhalb des darstellbaren B
 \lstinline|std::count_if(b, e, p)| & \lstinline|int|  Zählt Elemente, die das Prädikat erfüllen \\
 \lstinline|std::all_of(b, e, p)| & \lstinline|bool|  Prüft, ob alle Elemente das Prädikat erfüllen \\
 \lstinline|std::any_of(b, e, p)| & \lstinline|bool|  Prüft, ob mindestens ein Element das Prädikat erfüllt \\
-\lstinline|std::transform(b, e, d, f)| & \lstinline|void|  Wendet Funktion \lstinline|f| auf alle Elemente an und speichert sie in \lstinline|dest| \\
 \lstinline|std::max_element(b, e)| & \lstinline|Iterator|  Gibt den Iterator auf das größte Element im Bereich zurück \\
 \lstinline|std::min_element(b, e)| & \lstinline|Iterator|  Gibt den Iterator auf das kleinste Element im Bereich zurück \\
+\lstinline|std::for_each(b, e, f)| & \lstinline|void|  Wendet Funktion \lstinline|f| auf jedes Element im Bereich an \\
 
 \bottomrule
 \end{tabularx}
@@ -195,6 +183,86 @@ Overflow = Zugewiesene oder berechnete Zahl liegt außerhalb des darstellbaren B
     \item \lstinline|d| = Zieliterator (z.B. Anfang eines anderen Containers)
     \item \lstinline|f| = Funktion, die auf jedes Element angewendet wird (z.B. \lstinline|[](int x){return x*2;}|)
 \end{itemize}
+
+\section{Konventionen}
+
+\begin{itemize}
+\item \datastruct{Zugriffsmodifikatoren}: Reihenfolge: \lstinline|public:|, \lstinline|protected:|, \lstinline|private:|
+\item \datastruct{Konstruktoren}: Immer Explicit angeben 
+\item \datastruct{Destruktoren}: Immer Virtual angeben, wenn die Klasse vererbt wird
+\item \datastrunct{Membervariablen}: Immer mit \lstinline|m_| oder \lstinline|_m| kennzeichnen. Keine gleichen Namen wie Parameter im Konstruktor verwenden.
+\item \datastruct{Funktionen / Methoden}: Nicht komplett inline definieren: \lstinline|int add(int a, int b) {return a+b}|
+\item \datastruct{Void als Parameter}: Nie \lstinline|void| als Parameter verwenden: \lstinline|int foo(void);|
+\end{itemize}
+
+\section{Objektorientierung}
+
+\begin{itemize}
+   \item \datastruct{Konstruktor / Destruktor}: Konstruktoren werden in verschachtelten Klassen von der innersten zur äußersten Klasse aufgerufen. Destruktoren in umgekehrter Reihenfolge.
+   \item \datastruct{Virtual / Overrite}: Virtuelle Funktionen werden in der Basisklasse mit \lstinline|virtual| deklariert und in der abgeleiteten Klasse mit \lstinline|override| überschrieben.
+   \begin{itemize}
+        \item Wenn eine Methode als \lstinline|virtual| deklariert ist, wird zur Laufzeit die passende Methode der abgeleiteten Klasse aufgerufen, auch wenn der Zeiger oder die Referenz den Typ der Basisklasse hat.
+        \item Wenn eine Methode nicht als \lstinline|virtual| deklariert ist, wird die Methode abhängig vom Typ des Zeigers oder der Referenz aufgerufen (statischer Bindung).
+   \end{itemize}
+    \item \datastruct{Final}: Mit \lstinline|final| kann verhindert werden, dass eine Klasse weiter vererbt wird oder eine Methode überschrieben wird.
+\end{itemize}
+
+\section{Smart Pointer}
+
+Smart Pointer sind Klassen, die die Verwaltung von dynamisch allozierten Objekten übernehmen und automatisch den Speicher freigeben, wenn der Pointer nicht mehr benötigt wird.
+
+\begin{itemize}
+    \item \lstinline|std::unique_ptr<T>|: Besitzt ein Objekt exklusiv. Kann nicht kopiert, nur verschoben werden. Nutzt \lstinline|std::move()| zum Übertragen des Besitzes.
+    \item \lstinline|std::shared_ptr<T>|: Teilt den Besitz eines Objekts mit anderen \lstinline|shared_ptr|s. Verwendet Referenzzählung, um zu wissen, wann das Objekt gelöscht werden kann.
+\end{itemize}
+
+\newline\newline
+\subsection*{make\_shared / make\_unique}
+
+Empfohlene Methode zur Erstellung von Smart Pointern, da sie effizienter und sicherer ist als die direkte Verwendung von \lstinline|new|.
+
+\begin{itemize}
+    \item \lstinline|auto ptr = std::make_unique<T>();|: Erstellt einen \lstinline|unique_ptr| zu einem neuen Objekt vom Typ \lstinline|T|.
+    \item \lstinline|auto ptr = std::make_shared<T>();|: Erstellt einen \lstinline|shared_ptr| zu einem neuen Objekt vom Typ \lstinline|T|.
+\end{itemize}
+
+\subsection*{std::move}
+
+std::move ist ein Cast, der ein Objekt als "bewegbar" markiert; dies erlaubt dem Compiler, statt einer teuren Kopie eine schnelle Ressourcen-Übernahme durchzuführen, wobei das Originalobjekt in einem gültigen, aber unbestimmten Zustand zurückbleibt und sicher am Ende seines Gültigkeitsbereichs zerstört wird (Wird oft bei \lstinline|unique_ptr| verwendet).
+
+\section{Functional und Lambda}
+
+Benötigt \lstinline|#include <functional>|
+
+\lstinline|std::function<T>| ist nützlich um Funktionen als Objekt zu deklarieren, speichern und übergeben zu können. \algo{Beispiel}: \newline
+\lstinline|std::function<int(int,int)> sum = [](int a, int b) { return a + b; };|
+
+\subsection*{Lambda Funktionen}
+
+Lambda Funktionen sind anonyme Funktionen, die direkt im Code definiert werden können. Sie haben die folgende Syntax:
+
+\lstinline|[capture](parameters) -> return_type { body }|
+
+\begin{itemize}
+    \item \textbf{Capture}: Bestimmt, welche Variablen aus dem umgebenden Kontext verwendet werden können.
+    \begin{itemize}
+        \item \lstinline|[]|: Keine Variablen werden erfasst.
+        \item \lstinline|[=]|: Alle Variablen werden per Wert erfasst.
+        \item \lstinline|[&]|: Alle Variablen werden per Referenz erfasst.
+        \item \lstinline|[x, &y]|: Variable \lstinline|x| wird per Wert und \lstinline|y| per Referenz erfasst.
+    \end{itemize}
+    \item \textbf{Parameters}: Die Parameter der Lambda Funktion, ähnlich wie bei normalen Funktionen.
+    \item \textbf{Return Type}: Der Rückgabetyp der Funktion. Kann oft weggelassen werden, da der Compiler ihn ableiten kann.
+    \item \textbf{Body}: Der eigentliche Code der Funktion, eingeschlossen in geschweifte Klammern.
+\end{itemize}
+
+
+
+
+
+
+
+
 
 
 

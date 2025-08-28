@@ -1,0 +1,8 @@
+.idea
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+svg-inkscape/
+content
+.cache

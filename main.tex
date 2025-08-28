@@ -1,0 +1,203 @@
+\documentclass[10pt, a3paper, landscape]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{ragged2e} % Für besseren Textumbruch in X-Spalten
+
+% Seitenränder anpassen für maximale Ausnutzung
+\geometry{left=1.2cm, right=1.2cm, top=1cm, bottom=1cm, landscape}
+
+% --- C++ Style for listings ---
+\lstdefinestyle{cpp_style}{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{purple},
+    commentstyle=\color{gray},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    breaklines=true,
+    showstringspaces=false,
+    backgroundcolor=\color{lightgray!10} % A very light gray background
+}
+\lstset{style=cpp_style}
+
+% Eigene Befehle für Hervorhebungen
+\newcommand{\formel}[1]{\ensuremath{#1}}
+\newcommand{\algo}[1]{\textbf{\textcolor{blue!60!black}{#1}}}
+\newcommand{\datastruct}[1]{\textbf{\textcolor{red!60!black}{#1}}}
+\newcommand{\SubItem}[1]{
+    {\setlength\itemindent{15pt} \item[-] #1}
+}
+
+\setlist{nosep, leftmargin=*}
+\setlength{\columnsep}{0.7cm}
+
+\pagestyle{empty}
+
+\begin{document}
+\begin{multicols*}{4}
+
+\section{Typumwandlung}
+
+\begin{itemize}
+    \item \datastruct{Implicit Casting}: Automatische Typumwandlung durch den Compiler.
+    \begin{itemize}
+        \item \lstinline|int a = 5.4;| $\implies$ a wird zu einem int (5)
+        \item \lstinline|float b = 7/2;| $\implies$ Ganzzahlige Division, Ergebnis 3 wird zu double (3.0)
+        \item \lstinline|float c = 7/2.0;| $\implies$ Einer der Werte ist float, Ergebnis 3.5
+        \item \lstinline|double d = 'A' - 12;| $\implies$ char wird zu int (65), dann - 12 (53), dann zu double (53.0)
+        \item \lstinline|int e = true + 3;| $\implies$ bool wird zu int (1) + 3 (4), dann zu int (4)
+        \item Allgemein: \textit{Der kleinere Typ wird in den größeren umgewandelt}
+    \end{itemize}
+
+    \item \datastruct{Explicit Casting}: Manuelle Typumwandlung durch den Programmierer.
+    \begin{itemize} 
+        \item \lstinline|int x = (int)3.7;| $\implies$ Klassischer Cast: Ergebnis ist 3
+        \item \lstinline|int y = static_cast<int>(3.7);| $\implies$ Moderner Cast mit \lstinline|static_cast|: Ergebnis ist ebenfalls 3
+    \end{itemize}
+\end{itemize}
+
+\section{Hierarchie von Operatoren}
+
+\noindent % Verhindert Einrückung
+\begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
+\toprule
+\textbf{Priorität} & \textbf{Operator} & \textbf{Beschreibung} \\
+\midrule
+\textbf{Hoch}      & \texttt{!} \texttt{*} \texttt{\&} & \textbf{Unär:} Log. NICHT, Deref., Adresse \\
+$\downarrow$       & \texttt{*} \texttt{/}  & \textbf{Binär:} Multiplikation, Division \\
+$\downarrow$       & \texttt{+} \texttt{-}  & \textbf{Binär:} Addition, Subtraktion \\
+$\downarrow$       & \texttt{<<} \texttt{>>} & \textbf{Binär:} Bit-Shift Links/Rechts \\
+$\downarrow$       & \texttt{\&}             & \textbf{Binär:} Bitweises UND \\
+$\downarrow$       & \texttt{|}             & \textbf{Binär:} Bitweises ODER \\
+$\downarrow$       & \texttt{\&\&}            & \textbf{Binär:} Logisches UND \\
+\textbf{Niedrig}   & \texttt{||}            & \textbf{Binär:} Logisches ODER \\
+\bottomrule
+\end{tabularx}
+
+\section{Wertebereiche von Datentypen}
+
+\noindent
+\begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
+\toprule
+\textbf{Datentyp} & \textbf{Bytes} & \textbf{Wertebereich} \\
+\midrule
+\lstinline|bool| & 1 & \texttt{true} oder \texttt{false} \\
+\lstinline|char| & 1 & -128 bis 127 \\
+\lstinline|unsigned char| & 1 & 0 bis 255 \\
+\lstinline|short| & 2 & -32.768 bis 32.767 \\
+\lstinline|unsigned short| & 2 & 0 bis 65.535 \\
+\lstinline|int| & 4 & -2.147.483.648 bis 2.147.483.647 \\
+\lstinline|unsigned int| & 4 & 0 bis 4.294.967.295 \\
+\lstinline|long long| & 8 & ca. -9,2 x 10$^{18}$ bis 9,2 x 10$^{18}$ \\
+\lstinline|float| & 4 & ca. $\pm$3.4 x 10$^{38}$ (7 Dezimalstellen) \\
+\lstinline|double| & 8 & ca. $\pm$1.8 x 10$^{308}$ (15 Dezimalstellen) \\
+\bottomrule
+\end{tabularx}
+
+\section{Overflow von Zahlen}
+Overflow = Zugewiesene oder berechnete Zahl liegt außerhalb des darstellbaren Bereichs eines Datentyps.
+\begin{itemize}
+    \item \datastruct{Ganzzahlen}: Undefiniertes Verhalten. z.B. zu hohe Bits werden abgeschnitten oder es wird auf den Minimalwert zurückgesetzt.
+    \item \datastruct{Gleitkommazahlen}: Im IEEE 754 Standard wird bei Overflow der Wert \texttt{inf} (unendlich) zugewiesen.
+\end{itemize}
+
+\section{Definition und Deklaration}
+\begin{itemize}
+    \item \algo{Definition}: Reserviert Speicherplatz für eine Variable oder Funktion und kann optional initialisiert werden.
+    \begin{itemize}
+        \item Beispiel Variable: \lstinline|int x = 5;|
+    \end{itemize}
+    \item \datastruct{Deklaration}: Informiert den Compiler über den Typ und Namen einer Variable oder Funktion, reserviert aber keinen Speicherplatz.
+    \begin{itemize}
+        \item Beispiel Variable: \lstinline|int x;|
+        \item Beispiel Funktion: \lstinline|void foo();|
+    \end{itemize}
+    \item \datastruct{Prototyp}: Funktionsdeklaration ohne Funktionskörper.
+    \begin{itemize}
+        \item Beispiel: \lstinline|int map(double[], int, int (*)(double));|
+    \end{itemize}
+    \item \algo{Wichtig}: \textit{Jede Definition ist auch eine Deklaration!}
+\end{itemize}
+
+\section{String API}
+
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{Methode} & \textbf{Beschreibung} \\
+\midrule
+\lstinline|.length()| & Gibt die Länge des Strings zurück \\
+\lstinline|.empty()| & Prüft, ob der String leer ist \\
+\lstinline|.clear()| & Löscht den Inhalt des Strings \\
+\lstinline|.append(str)| & Fügt den String \lstinline|str| an das Ende an (+=) \\
+\lstinline|.at(idx)| & Gibt das Zeichen an der Position \lstinline|idx| zurück ([index]) \\
+\lstinline|.substr(start, len)| & Gibt einen Teilstring ab \lstinline|start| mit Länge \lstinline|len| zurück \\
+\lstinline|.find(str)| & Sucht nach \lstinline|str| und gibt die Startposition zurück \\
+\bottomrule
+\end{tabularx}
+
+\section{Vector API}
+
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{Methode} & \textbf{Beschreibung} \\
+\midrule
+\lstinline|.size()| & Gibt die Anzahl der Elemente im Vektor zurück \\
+\lstinline|.empty()| & Prüft, ob der Vektor leer ist \\
+\lstinline|.clear()| & Entfernt alle Elemente aus dem Vektor \\
+\lstinline|.push_back(val)| & Fügt das Element \lstinline|val| am Ende des Vektors hinzu \\
+\lstinline|.pop_back()| & Entfernt das letzte Element des Vektors \\
+\lstinline|.at(idx)| & Gibt das Element an der Position \lstinline|idx| zurück \\
+\lstinline|.front() / .back()| & Gibt das erste/letzte Element des Vektors zurück \\
+\lstinline|.begin() / .end()| & Gibt Iteratoren auf den Anfang/Ende des Vektors zurück \\
+\bottomrule
+\end{tabularx}
+
+\section{Nützliche std:: Funktionen}
+\newline 
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{Methode} & \textbf{Beschreibung} \\
+\midrule
+\lstinline|std::sort(b, e)| & \lstinline|void|  Sortiert einen Bereich \\
+\lstinline|std::find(b, e, v)| & \lstinline|Iterator|  Sucht einen Wert im Bereich \\
+\lstinline|std::reverse(b, e)| & \lstinline|void|  Dreht die Reihenfolge im Bereich um \\
+\lstinline|std::max(a, b)| & \lstinline|T|  Gibt das größere von zwei Werten zurück \\
+\lstinline|std::find_if(b, e, p)| & \lstinline|Iterator|  Sucht das erste Element, das das Prädikat erfüllt \\
+\lstinline|std::count_if(b, e, p)| & \lstinline|int|  Zählt Elemente, die das Prädikat erfüllen \\
+\lstinline|std::all_of(b, e, p)| & \lstinline|bool|  Prüft, ob alle Elemente das Prädikat erfüllen \\
+\lstinline|std::any_of(b, e, p)| & \lstinline|bool|  Prüft, ob mindestens ein Element das Prädikat erfüllt \\
+\lstinline|std::transform(b, e, d, f)| & \lstinline|void|  Wendet Funktion \lstinline|f| auf alle Elemente an und speichert sie in \lstinline|dest| \\
+\lstinline|std::max_element(b, e)| & \lstinline|Iterator|  Gibt den Iterator auf das größte Element im Bereich zurück \\
+\lstinline|std::min_element(b, e)| & \lstinline|Iterator|  Gibt den Iterator auf das kleinste Element im Bereich zurück \\
+
+\bottomrule
+\end{tabularx}
+
+\begin{itemize}
+    \item \lstinline|b| = \lstinline|begin()|, \lstinline|e| = \lstinline|end()|
+    \item \lstinline|p| = Prädikat (Funktion, die bool zurückgibt) z.B. \lstinline|[](int x){return x>5;}|
+    \item \lstinline|v| = Wert, der gesucht wird
+    \item \lstinline|d| = Zieliterator (z.B. Anfang eines anderen Containers)
+    \item \lstinline|f| = Funktion, die auf jedes Element angewendet wird (z.B. \lstinline|[](int x){return x*2;}|)
+\end{itemize}
+
+
+
+
+\end{multicols*}
+\end{document}

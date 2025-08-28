@@ -4,5 +4,8 @@
 *.fls
 *.fdb_latexmk
 svg-inkscape/
-content
+
 .cache
+.DS_Store
+*.out
+.pyenv

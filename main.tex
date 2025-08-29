@@ -1,5 +1,5 @@
 
-\documentclass[9pt, a3paper, landscape]{article}
+\documentclass[10pt, landscape]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -29,7 +29,7 @@
 
 
 % Seitenränder anpassen für maximale Ausnutzung
-\geometry{left=1.2cm, right=1.2cm, top=1cm, bottom=1cm, landscape}
+\geometry{a3paper, left=1.2cm, right=1.2cm, top=1cm, bottom=1cm, landscape}
 
 % --- C++ Style for listings ---
 \lstdefinestyle{cpp_style}{
@@ -209,10 +209,9 @@ Overflow = Zugewiesene oder berechnete Zahl liegt außerhalb des darstellbaren B
 
 Benötigt \lstinline|#include <functional>|
 
-\lstinline|std::function<T>| ist nützlich um Funktionen als Objekt zu deklarieren, speichern und übergeben zu können. \algo{Beispiel}: \newline
+\lstinline|std::function<T>| ist nützlich um Funktionen als Objekt zu deklarieren, speichern und übergeben zu können. \algo{Beispiel}:
 \lstinline|std::function<int(int,int)> sum = [](int a, int b) { return a + b; };|
-\newline
-\newline
+
 \datastruct{Lambda Funktionen}
 
 Lambda Funktionen sind anonyme Funktionen, die direkt im Code definiert werden können. Sie haben die folgende Syntax:
@@ -263,8 +262,7 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
 
  \section{Nützliche std:: Funktionen}
  Benötigt \lstinline|#include <algorithm>| und \lstinline|#include <functional>|
- \newline 
- \newline 
+
  \noindent
  \begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
  \toprule
@@ -298,7 +296,7 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
 \item \datastruct{Zugriffsmodifikatoren}: Reihenfolge: \lstinline|public:|, \lstinline|protected:|, \lstinline|private:|
 \item \datastruct{Konstruktoren}: Immer Explicit angeben 
 \item \datastruct{Destruktoren}: Immer Virtual angeben, wenn die Klasse vererbt wird
-\item \datastrunct{Membervariablen}: Immer mit \lstinline|m_| oder \lstinline|_m| kennzeichnen. Keine gleichen Namen wie Parameter im Konstruktor verwenden.
+\item \datastruct{Membervariablen}: Immer mit \lstinline|m_| oder \lstinline|_m| kennzeichnen. Keine gleichen Namen wie Parameter im Konstruktor verwenden.
 \item \datastruct{Funktionen / Methoden}: Nicht komplett inline definieren: \lstinline|int add(int a, int b) {return a+b}|
 \item \datastruct{Void als Parameter}: Nie \lstinline|void| als Parameter verwenden: \lstinline|int foo(void);|
 \end{itemize}
@@ -324,15 +322,16 @@ Smart Pointer sind Klassen, die die Verwaltung von dynamisch allozierten Objekte
     \item \lstinline|std::shared_ptr<T>|: Teilt den Besitz eines Objekts mit anderen \lstinline|shared_ptr|s. Verwendet Referenzzählung, um zu wissen, wann das Objekt gelöscht werden kann.
 \end{itemize}
 
-\newline\newline
 \subsection*{make\_shared / make\_unique}
 
+\begingroup\sloppy
 Empfohlene Methode zur Erstellung von Smart Pointern, da sie effizienter und sicherer ist als die direkte Verwendung von \lstinline|new|.
 
 \begin{itemize}
     \item \lstinline|auto ptr = std::make_unique<T>();|: Erstellt einen \lstinline|unique_ptr| zu einem neuen Objekt vom Typ \lstinline|T|.
     \item \lstinline|auto ptr = std::make_shared<T>();|: Erstellt einen \lstinline|shared_ptr| zu einem neuen Objekt vom Typ \lstinline|T|.
 \end{itemize}
+\endgroup
 
 \subsection*{std::move}
 
@@ -385,6 +384,7 @@ Speicher und initialisiert  \\
     \begin{itemize}
         \item \algo{Verkettung (Chaining)}: Jedes Array-Element enthält eine Liste von Einträgen, die auf diese Position abgebildet werden.
         \item \algo{Sondieren (Open Addressing)}: Lineares, quadratisches Sondieren oder doppeltes Hashing.
+\end{itemize}
 \end{itemize}
 
 
@@ -507,20 +507,22 @@ END_VAR
 \begin{itemize}
 \item \algo{Kontaktplan}: Grafische Programmiersprache, die elektrische Schaltpläne nachbildet.
 \begin{itemize}
-    \item \texttt{--\verb|][--}: Öffner
-    \item \texttt{--\verb|]\textbackslash{}[--}: Schließer 
+    \item \texttt{--][--}: Öffner
+    \item \texttt{--]\textbackslash{}[--}: Schließer
     \item \texttt{--()\!--}: Spule (Aktor)
 \end{itemize}
 \item \algo{Funktionsbausteinsprache (FBS)}: Logik-Gatter, FlipFlops, TON, TOF werden als Bausteine dargestellt und verbunden.
 \item \algo{Continuous Function Chart (CFC)}: Erweiterung der FBS mit freier Anordnung der Bausteine. Keine strikte Abarbeitung von links nach rechts.
 \item \algo{Strukturierter Text (ST)}: Hochsprachliche Programmiersprache ähnlich zu Pascal/C. Syntax: 
 
+\begingroup\sloppy
 \begin{itemize}
     \item Variablen mit \lstinline|VAR ... END_VAR| deklarieren
     \item Anweisungen mit \lstinline|:=| für Zuweisung
     \item Kontrollstrukturen: \lstinline|IF ... THEN ... ELSE ... END_IF;|, \lstinline|FOR ... TO ... DO ... END_FOR;|
     \item Funktionen und Funktionsbausteine mit \lstinline|FUNCTION ... END_FUNCTION| bzw. \lstinline|FUNCTION_BLOCK ... END_FUNCTION_BLOCK|
 \end{itemize}
+\endgroup
 
 \begin{lstlisting}[language=ST, numbers=none]
 FOR i := 1 TO 3 BY 1 DO
@@ -549,6 +551,7 @@ END_IF;
 \textbf{D} & 1 nach Zeitverzögerung  \\
 \bottomrule
 \end{tabularx}
+\end{itemize}
 
 \subsection*{Alternativ vs. Parallel}
 
@@ -562,7 +565,7 @@ END_IF;
     \item \datastruct{Datenkapselung}: mit GET und SET Methoden.
     \item \datastruct{Vererbung}: Mit \lstinline|EXTENDS| Schlüsselwort.
     \item \datastruct{Interfaces}: Mit \lstinline|INTERFACE ... END_INTERFACE| Blöcken.
-    \item \datastruct{Funktionsblöcke}: Mit \lstinline|FUNCTION_BLOCK ... END_FUNCTION_BLOCK| Blöcken.
+\item \datastruct{Funktionsblöcke}: {\sloppy Mit \lstinline|FUNCTION_BLOCK ... END_FUNCTION_BLOCK| Blöcken.}
     \begin{lstlisting}[language=ST, numbers=none]
 FUNCTION_BLOCK Fun
 VAR_INPUT in : INT; END_VAR
@@ -621,6 +624,8 @@ Es müssen mindestens $M$ von insgesamt $N$ Komponenten korrekt funktionieren, d
 sicherheitsrelevante Aktion ausführt. 
 
 \noindent
+\begingroup
+\setlength{\tabcolsep}{4pt}
 \renewcommand{\cellalign}{l} % Stellt sicher, dass der Text in makecell linksbündig ist
 \begin{tabularx}{\linewidth}{l >{\RaggedRight}X  >{\RaggedRight}X}
 \toprule
@@ -634,6 +639,7 @@ sicherheitsrelevante Aktion ausführt.
 \textbf{3oo3} & Extrem Hoch / Sehr niedrig & SIL-4 Anwendungen \\
 \bottomrule
 \end{tabularx}
+\endgroup
 
 \end{multicols*}
 \end{document}

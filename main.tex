@@ -1,8 +1,10 @@
+
 \documentclass[10pt, a3paper, landscape]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage[ngerman]{babel}
 \usepackage{graphicx}
 \usepackage{multicol}
 \usepackage{geometry}
@@ -13,6 +15,17 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{ragged2e} % Für besseren Textumbruch in X-Spalten
+\usepackage[table]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[table]{xcolor}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{makecell}
+
 
 % Seitenränder anpassen für maximale Ausnutzung
 \geometry{left=1.2cm, right=1.2cm, top=1cm, bottom=1cm, landscape}
@@ -32,6 +45,46 @@
 }
 \lstset{style=cpp_style}
 
+\lstdefinelanguage{ST}{
+  morekeywords={VAR,END_VAR,IF,THEN,ELSE,FOR,TO,DO,END_IF,END_FOR, TYPE, STRUCT, END_TYPE, STR, INT, BOOL, REAL, TRUE, FALSE, END_STRUCT, INT, ARRAY, OF, BY, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, FUNCTION, FUNCTION_BLOCK, END_FUNCTION, END_FUNCTION_BLOCK, RETURN, CASE, OF, END_CASE, ELSIF},
+  sensitive=true,
+  morecomment=[l]{(*},
+  morecomment=[s]{(*}{*)},
+  morestring=[b]",
+}
+% ST Style ohne Zeilennummern
+\lstdefinestyle{st_style}{
+    language=ST,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{teal}\bfseries,
+    stringstyle=\color{purple},
+    commentstyle=\color{gray},
+    numbers=none,
+    breaklines=true,
+    showstringspaces=false,
+    backgroundcolor=\color{lightgray!10}
+}
+
+
+% make sections smaller 
+
+\usepackage{titlesec}
+
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
+
+% reduce space before and after sections
+
+\titlespacing*{\section}{0pt}{1.5ex plus 1ex minus .2ex}{1ex plus .2ex}
+
+% machze subsections kleiner
+
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\titlespacing*{\subsection}{0pt}{1ex plus 1ex minus .2ex}{0.5ex plus .2ex}
+
+
+
+
 % Eigene Befehle für Hervorhebungen
 \newcommand{\formel}[1]{\ensuremath{#1}}
 \newcommand{\algo}[1]{\textbf{\textcolor{blue!60!black}{#1}}}
@@ -47,6 +100,19 @@
 
 \begin{document}
 \begin{multicols*}{4}
+
+\section{Kompilierungsprozess}
+
+\begin{itemize}
+    \item \datastruct{Präprozessor}: Führt Direktiven wie \lstinline|#include| und \lstinline|#define| aus. Erzeugt eine erweiterte Quellcodedatei.
+    
+    \item \datastruct{Compiler}: Übersetzt den C++ Quellcode (\lstinline|.cpp|) in Assembly-Code (\lstinline|.asm|).
+   
+    \item \datastruct{Assembler}: Folgt auf den Compiler und übersetzt den Assembly-Code in Maschinencode (Binär - \lstinline|.obj|).
+   
+    \item \datastruct{Linker}: Kombiniert verschiedene Objektdateien und Bibliotheken (\lstinline|.lib|) zu einem einzigen, ausführbaren Programm.
+
+\end{itemize}
 
 \section{Typumwandlung}
 
@@ -126,63 +192,98 @@ Overflow = Zugewiesene oder berechnete Zahl liegt außerhalb des darstellbaren B
     \end{itemize}
     \item \datastruct{Prototyp}: Funktionsdeklaration ohne Funktionskörper.
     \begin{itemize}
-        \item Beispiel: \lstinline|int map(double[], int, int (*)(double));|
+        \item Beispiel: \lstinline|double sum(double[]);|
     \end{itemize}
     \item \algo{Wichtig}: \textit{Jede Definition ist auch eine Deklaration!}
 \end{itemize}
 
-\section{String und Vector API}
+\section{Functional und Lambda}
 
-\noindent
-\begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
-\toprule
-\textbf{Typ} & \textbf{Methode} & \textbf{Beschreibung} \\
-\midrule
-\texttt{string/vector} & \lstinline|.size()| / \lstinline|.length()| & Gibt die Anzahl der Elemente bzw. die Länge zurück \\
-\texttt{string/vector} & \lstinline|.empty()| & Prüft, ob leer \\
-\texttt{string/vector} & \lstinline|.clear()| & Löscht den Inhalt \\
-\texttt{string} & \lstinline|.append(str)| & Fügt \lstinline|str| am Ende an (auch \lstinline|+=| möglich) \\
-\texttt{vector} & \lstinline|.push_back(val)| & Fügt \lstinline|val| am Ende hinzu \\
-\texttt{vector} & \lstinline|.pop_back()| & Entfernt das letzte Element \\
-\texttt{string/vector} & \lstinline|.at(idx)| & Gibt Element/Zei­chen an Position \lstinline|idx| zurück \\
-\texttt{string/vector} & \lstinline|.front() / .back()| & Erstes/letztes Element zurückgeben \\
-\texttt{string/vector} & \lstinline|.begin() / .end()| & Iteratoren auf Anfang/Ende \\
-\texttt{string} & \lstinline|.substr(start, len)| & Teilstring ab \lstinline|start| mit Länge \lstinline|len| \\
-\texttt{string} & \lstinline|.find(str)| & Sucht nach \lstinline|str| und gibt Startposition zurück \\
-\bottomrule
-\end{tabularx}
+Benötigt \lstinline|#include <functional>|
 
-\section{Nützliche std:: Funktionen}
-Benötigt \lstinline|#include <algorithm>| und \lstinline|#include <functional>|
-\newline 
-\newline 
-\noindent
-\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
-\toprule
-\textbf{Methode} & \textbf{Beschreibung} \\
-\midrule
-\lstinline|std::sort(b, e)| & \lstinline|void|  Sortiert einen Bereich \\
-\lstinline|std::find(b, e, v)| & \lstinline|Iterator|  Sucht einen Wert im Bereich \\
-\lstinline|std::reverse(b, e)| & \lstinline|void|  Dreht die Reihenfolge im Bereich um \\
-\lstinline|std::max(a, b)| & \lstinline|T|  Gibt das größere von zwei Werten zurück \\
-\lstinline|std::find_if(b, e, p)| & \lstinline|Iterator|  Sucht das erste Element, das das Prädikat erfüllt \\
-\lstinline|std::count_if(b, e, p)| & \lstinline|int|  Zählt Elemente, die das Prädikat erfüllen \\
-\lstinline|std::all_of(b, e, p)| & \lstinline|bool|  Prüft, ob alle Elemente das Prädikat erfüllen \\
-\lstinline|std::any_of(b, e, p)| & \lstinline|bool|  Prüft, ob mindestens ein Element das Prädikat erfüllt \\
-\lstinline|std::max_element(b, e)| & \lstinline|Iterator|  Gibt den Iterator auf das größte Element im Bereich zurück \\
-\lstinline|std::min_element(b, e)| & \lstinline|Iterator|  Gibt den Iterator auf das kleinste Element im Bereich zurück \\
-\lstinline|std::for_each(b, e, f)| & \lstinline|void|  Wendet Funktion \lstinline|f| auf jedes Element im Bereich an \\
+\lstinline|std::function<T>| ist nützlich um Funktionen als Objekt zu deklarieren, speichern und übergeben zu können. \algo{Beispiel}: \newline
+\lstinline|std::function<int(int,int)> sum = [](int a, int b) { return a + b; };|
+\newline
+\newline
+\datastruct{Lambda Funktionen}
 
-\bottomrule
-\end{tabularx}
+Lambda Funktionen sind anonyme Funktionen, die direkt im Code definiert werden können. Sie haben die folgende Syntax:
+
+\lstinline|[capture](parameters) -> return_type { body }|
 
 \begin{itemize}
-    \item \lstinline|b| = \lstinline|begin()|, \lstinline|e| = \lstinline|end()|
-    \item \lstinline|p| = Prädikat (Funktion, die bool zurückgibt) z.B. \lstinline|[](int x){return x>5;}|
-    \item \lstinline|v| = Wert, der gesucht wird
-    \item \lstinline|d| = Zieliterator (z.B. Anfang eines anderen Containers)
-    \item \lstinline|f| = Funktion, die auf jedes Element angewendet wird (z.B. \lstinline|[](int x){return x*2;}|)
+    \item \textbf{Capture}: Bestimmt, welche Variablen aus dem umgebenden Kontext verwendet werden können.
+    \begin{itemize}
+        \item \lstinline|[]|: Keine Variablen werden erfasst.
+        \item \lstinline|[=]|: Alle Variablen werden per Wert erfasst.
+        \item \lstinline|[&]|: Alle Variablen werden per Referenz erfasst.
+        \item \lstinline|[x, &y]|: Variable \lstinline|x| per Wert \lstinline|y| per Referenz.
+    \end{itemize}
 \end{itemize}
+
+\section{Iteratoren}
+Benötigt \lstinline|#include <vector>|. 
+Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Containers (wie \lstinline|std::vector|, \lstinline|std::list|, etc.) zu iterieren. 
+\begin{itemize}
+    \item \lstinline|auto it = vec.begin();|: Iterator auf Anfang
+    \item \lstinline|*it|: Zugriff auf Element
+    \item \lstinline|++it|, \lstinline|--it|: Vorwärts/Rückwärts bewegen
+    \item \lstinline|it != vec.end()|: Vergleich mit Ende
+    \item \lstinline|std::advance(it, n)|: Iterator um n Positionen bewegen
+    \item \lstinline|std::distance(it1, it2)|: Abstand zwischen zwei Iteratoren
+\end{itemize}
+
+
+ \section{String und Vector API}
+ \noindent
+ \begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
+ \toprule
+\textbf{Typ} & \textbf{Methode} & \textbf{Kurzbeschreibung} \\
+\midrule
+\texttt{string/vector} & \lstinline|.size()| & Anzahl Elemente \\
+\texttt{string/vector} & \lstinline|.empty()| & Leer? \\
+\texttt{string/vector} & \lstinline|.clear()| & Inhalt löschen \\
+\texttt{vector} & \lstinline|.push_back(val)| & Am Ende anhängen \\
+\texttt{vector} & \lstinline|.pop_back()| & Letztes entfernen \\
+\texttt{string/vector} & \lstinline|.at(idx)| & Element an Position \\
+\texttt{string/vector} & \lstinline|.front()/back()| & Erstes/letztes Element \\
+\texttt{string/vector} & \lstinline|.begin()/end()| & Iteratoren \\
+\texttt{string} & \lstinline|.substr(st,len)| & Teilstring \lstinline|st| \ \\
+\texttt{string} & \lstinline|.find(str)| & Sucht \lstinline|str| \\
+\bottomrule
+\end{tabularx}
+
+ \section{Nützliche std:: Funktionen}
+ Benötigt \lstinline|#include <algorithm>| und \lstinline|#include <functional>|
+ \newline 
+ \newline 
+ \noindent
+ \begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+ \toprule
+ \textbf{Methode} & \textbf{Beschreibung} \\
+ \midrule
+ \lstinline|std::sort(b, e)| & \lstinline|void|  Sortiert einen Bereich \\
+ \lstinline|std::find(b, e, v)| & \lstinline|Iterator|  Sucht einen Wert im Bereich \\
+ \lstinline|std::reverse(b, e)| & \lstinline|void|  Dreht die Reihenfolge im Bereich um \\
+ \lstinline|std::max(a, b)| & \lstinline|T|  Gibt das größere von zwei Werten zurück \\
+ \lstinline|std::find_if(b, e, p)| & \lstinline|Iterator|  Sucht das erste Element, das das Prädikat erfüllt \\
+ \lstinline|std::count_if(b, e, p)| & \lstinline|int|  Zählt Elemente, die das Prädikat erfüllen \\
+ \lstinline|std::all_of(b, e, p)| & \lstinline|bool|  Prüft, ob alle Elemente das Prädikat erfüllen \\
+ \lstinline|std::any_of(b, e, p)| & \lstinline|bool|  Prüft, ob mindestens ein Element das Prädikat erfüllt \\
+ \lstinline|std::max_element(b, e)| & \lstinline|Iterator|  auf das größte Element\\
+ \lstinline|std::min_element(b, e)| & \lstinline|Iterator|  Iterator auf das kleinste Element \\
+ \lstinline|std::for_each(b, e, f)| & \lstinline|void|  Wendet Funktion \lstinline|f| auf jedes Element im Bereich an \\
+
+ \bottomrule
+ \end{tabularx}
+
+ \begin{itemize}
+     \item \lstinline|b| = \lstinline|begin()|, \lstinline|e| = \lstinline|end()|
+     \item \lstinline|p| = Prädikat (Funktion, die bool zurückgibt) z.B. \lstinline|[](int x){return x>5;}|
+     \item \lstinline|v| = Wert, der gesucht wird
+     \item \lstinline|d| = Zieliterator (z.B. Anfang eines anderen Containers)
+     \item \lstinline|f| = Funktion, die auf jedes Element angewendet wird (z.B. \lstinline|[](int x){return x*2;}|)
+ \end{itemize}
 
 \section{Konventionen}
 
@@ -228,44 +329,305 @@ Empfohlene Methode zur Erstellung von Smart Pointern, da sie effizienter und sic
 
 \subsection*{std::move}
 
-std::move ist ein Cast, der ein Objekt als "bewegbar" markiert; dies erlaubt dem Compiler, statt einer teuren Kopie eine schnelle Ressourcen-Übernahme durchzuführen, wobei das Originalobjekt in einem gültigen, aber unbestimmten Zustand zurückbleibt und sicher am Ende seines Gültigkeitsbereichs zerstört wird (Wird oft bei \lstinline|unique_ptr| verwendet).
+\lstinline|std::move| markiert ein Objekt als "bewegbar", sodass Ressourcen effizient übernommen werden, statt kopiert zu werden. Das Quellobjekt bleibt gültig, aber sein Zustand ist nicht definiert.
+\begin{lstlisting}[language=C++]
+std::unique_ptr<int> a = std::make_unique<int>(5);
+std::unique_ptr<int> b = std::move(a); 
+\end{lstlisting}
 
-\section{Functional und Lambda}
 
-Benötigt \lstinline|#include <functional>|
 
-\lstinline|std::function<T>| ist nützlich um Funktionen als Objekt zu deklarieren, speichern und übergeben zu können. \algo{Beispiel}: \newline
-\lstinline|std::function<int(int,int)> sum = [](int a, int b) { return a + b; };|
 
-\subsection*{Lambda Funktionen}
 
-Lambda Funktionen sind anonyme Funktionen, die direkt im Code definiert werden können. Sie haben die folgende Syntax:
 
-\lstinline|[capture](parameters) -> return_type { body }|
+
+
+
+\section{Speicherbereiche}
+
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{Bereich} & \textbf{Beschreibung}  \\
+\midrule
+\textbf{Stack} & Alle Rücksprungadressen und lokalen Variablen  \\
+\textbf{Heap} & Dynamisch alloziierte Objekte mit \lstinline|new| oder \lstinline|malloc|  \\
+\textbf{Data Segment} & Globale Variablen oder mit \lstinline|static|; zum Programmstart im
+Speicher und initialisiert  \\
+\textbf{BSS Segment} & Globale Variablen oder mit \lstinline|static|; zum Programmstart im Speicher, aber nicht initialisiert (werden auf 0 gesetzt)  \\
+
+\bottomrule
+\end{tabularx}
+
+
+\textbf{Zugriffszeiten verschiedener Speicherarten}:  Register des Prozessors $>$ Cache Speicher $>$ Hauptspeicher (RAM) $>$ SSD/HDD (Von schnell nach langsam)
+
+
+\section{Hashing}
 
 \begin{itemize}
-    \item \textbf{Capture}: Bestimmt, welche Variablen aus dem umgebenden Kontext verwendet werden können.
+    \item \datastruct{Hashmap}: Datenstruktur, die Schlüssel-Wert-Paare speichert und schnellen Zugriff auf Werte über ihre Schlüssel ermöglicht.
     \begin{itemize}
-        \item \lstinline|[]|: Keine Variablen werden erfasst.
-        \item \lstinline|[=]|: Alle Variablen werden per Wert erfasst.
-        \item \lstinline|[&]|: Alle Variablen werden per Referenz erfasst.
-        \item \lstinline|[x, &y]|: Variable \lstinline|x| wird per Wert und \lstinline|y| per Referenz erfasst.
+        \item Vorteile: Schneller Zugriff, Einfügen und Löschen in durchschnittlich O(1) Zeit.
     \end{itemize}
-    \item \textbf{Parameters}: Die Parameter der Lambda Funktion, ähnlich wie bei normalen Funktionen.
-    \item \textbf{Return Type}: Der Rückgabetyp der Funktion. Kann oft weggelassen werden, da der Compiler ihn ableiten kann.
-    \item \textbf{Body}: Der eigentliche Code der Funktion, eingeschlossen in geschweifte Klammern.
+    \item \datastruct{Hashfunktion}: Berechnet die Position eines Objektes in einer Tabelle (Array). z.B.:
+    \begin{itemize}
+        \item \formel{h(k) = k \mod m}, wobei \formel{k} der Schlüssel und \formel{m} die Größe des Arrays ist.
+    \end{itemize}
+    \item \datastruct{Kollisionsbehandlung}: Methoden zur Behandlung von Kollisionen:
+    \begin{itemize}
+        \item \algo{Verkettung (Chaining)}: Jedes Array-Element enthält eine Liste von Einträgen, die auf diese Position abgebildet werden.
+        \item \algo{Sondieren (Open Addressing)}: Lineares, quadratisches Sondieren oder doppeltes Hashing.
 \end{itemize}
 
 
 
+\subsection*{Beispiele}
+
+\begin{itemize}
+    \item \formel{h(k)}: Primäre Hashfunktion (z.B. \formel{k \mod m})
+    \item \formel{i}: Anzahl der Versuche (0, 1, 2, ...)
+    \item \formel{m}: Größe der Hash-Tabelle
+\end{itemize}
+
+\noindent\hrulefill
+
+\begin{itemize} 
+\item \datastruct{Lineares Sondieren}: \formel{h_i(k) = (h(k) + i) \mod m}
+\item \datastruct{Quadratisches Sondieren}: \formel{h_i(k) = (h(k) + c_1 \cdot i + c_2 \cdot i^2) \mod m}
+\begin{itemize}
+    \item \formel{c_1, c_2}: Konstanten (z.B. 0.5)
+\end{itemize}
+\item \datastruct{Doppeltes Hashing}: \formel{h_i(k) = (h(k) + i \cdot h'(k)) \mod m}
+
+\begin{itemize}
+    \item \formel{h'(k)}: Sekundäre Hashfunktion (z.B. \formel{1 + (k \mod (m'))} wobei \formel{m'} eine Primzahl kleiner als \formel{m} ist)
+\end{itemize}
+\end{itemize}
+
+\subsection*{C++ Hashmap}
+Benötigt \lstinline|#include <unordered_map>|. \lstinline|std::unordered_map<Key, Value> map;|. \lstinline|std::pair<Key, Value> pair(key, value);|
+
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{Methode} & \textbf{Beschreibung} \\
+\midrule
+\lstinline|map[key]| & Zugriff/Ändern eines Werts \\
+\lstinline|map.insert(pair)| & Einfügen, falls Schlüssel neu \\
+\lstinline|map.find(key)| & Sucht Schlüssel, Iterator oder \lstinline|end()| \\
+\lstinline|map.erase(key)| & Löscht Schlüssel \\
+\lstinline|map.size()| & Anzahl Elemente \\
+\bottomrule
+\end{tabularx}
+
+\section{Vector vs. List}
+
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{Aspekt} & \textbf{Beschreibung} \\
+\midrule
+\textbf{Speicherstruktur} & \datastruct{Vector}: Kontinuierlicher Speicherblock. \newline \datastruct{List}: Verkettete Knoten, die nicht zusammenhängend im Speicher liegen. \\
+\textbf{Zugriffszeit} & \datastruct{Vector}: O(1) für direkten Zugriff. \newline \datastruct{List}: O(n) für direkten Zugriff. \\
+\textbf{Einfügen/Löschen} & \datastruct{Vector}: O(n) im Durchschnitt, da Elemente verschoben werden müssen. \newline \datastruct{List}: O(1), wenn der Iterator bekannt ist. \\ 
+\textbf{Speicherverbrauch} & \datastruct{Vector}: Weniger Overhead, da nur ein Speicherblock. \newline \datastruct{List}: Mehr Overhead durch Zeiger in jedem Knoten. \\
+\bottomrule
+\end{tabularx}
+
+\section{Von Neumann Zyklus}
+\begin{itemize}
+    \item \datastruct{Fetch}: Der Prozessor holt den nächsten Befehl aus dem Speicher (RAM) und lädt ihn in das Befehlsregister.
+    \item \datastruct{Decode}: Der Prozessor dekodiert den Befehl, um zu verstehen, welche Operation ausgeführt werden soll und welche Operanden benötigt werden.
+    \item \datastruct{Fetch Operands}: Der Prozessor holt die benötigten Operanden aus dem Speicher oder den Registern.
+    \item \datastruct{Execute}: Der Prozessor führt die dekodierte Operation aus, indem er die erforderlichen Berechnungen durchführt oder Daten verarbeitet.
+    \item \datastruct{Write Back}: Das Ergebnis der Operation wird zurück in den Speicher oder die Register geschrieben.
+\end{itemize}
+
+\textbf{Harvard-Architektur}: Getrennte Speicher für Daten und Befehle, paralleler Zugriff möglich.
 
 
+\section{Automatisierungstechnik}
+  
+\begin{center}
+    \includegraphics[width=0.8\linewidth]{assets/ATC.png}
+\end{center}
 
+\datastruct{Speicherprogrammierbare Steuerung (SPS)}: Industrieller Computer zur Steuerung von Maschinen und Prozessen. SPS-Zyklus:
+\begin{itemize}
+    \item \algo{Eingabe lesen}: Alle Eingänge (Sensoren, Taster) werden eingelesen (Vom PAE).
+    \item \algo{Programm ausführen}: Das Steuerungsprogramm wird basierend auf den Eingaben ausgeführt.
+    \item \algo{Ausgabe schreiben}: Alle Ausgänge (Aktoren, Lampen) werden entsprechend dem Programmzustand gesetzt (Vom PAA).
+\end{itemize}
 
+\begin{center}
+    \includegraphics[width=0.5\linewidth]{assets/ATT.png}
+\end{center}
 
+\algo{Worst-Case}: Doppelte der Zykluszeit (Eingabe lesen + Programm ausführen + Ausgabe schreiben).
 
+\begin{center}
+    \includegraphics[width=0.8\linewidth]{assets/ATP.png}
+\end{center}
 
+\section{Prozessklassifizierung}
 
+\begin{itemize}
+    \item \datastruct{Kontinuierliche Prozesse}: Ständige Veränderung der Prozessgrößen (z.B. Temperaturregelung).
+    \item \datastruct{Stück-Prozesse}: Verarbeitung einzelner Einheiten (z.B. Montage von Autos).
+    \item \datastruct{Batch-Prozesse}: Verarbeitung in Chargen (z.B. Chemische Produktion).
+\end{itemize}
+
+\section{IEC 61131-3}
+Deklaration von Variablen:
+
+\begin{lstlisting}[language=ST, numbers=none]
+TYPE Ampel :
+STRUCT
+    AKTIV         : BOOL;
+END_STRUCT
+END_TYPE
+TYPE AmpelArray : ARRAY[1..3] OF Ampel; END_TYPE
+VAR
+    Hauptstr_Ampel : Ampel;
+    Zykluszeit     : TIME := T#5s;
+    AlleAmpeln     : AmpelArray;
+END_VAR
+\end{lstlisting}
+
+\algo{Hinweis}: \textit{Variablen können auch in \lstinline|VAR_GLOBAL ... END_VAR| Blöcken deklariert werden, um sie in mehreren Programmen verfügbar zu machen.}
+
+\begin{itemize}
+\item \algo{Kontaktplan}: Grafische Programmiersprache, die elektrische Schaltpläne nachbildet.
+\begin{itemize}
+    \item \texttt{--\verb|][--}: Öffner
+    \item \texttt{--\verb|]\textbackslash{}[--}: Schließer 
+    \item \texttt{--()\!--}: Spule (Aktor)
+\end{itemize}
+\item \algo{Funktionsbausteinsprache (FBS)}: Logik-Gatter, FlipFlops, TON, TOF werden als Bausteine dargestellt und verbunden.
+\item \algo{Continuous Function Chart (CFC)}: Erweiterung der FBS mit freier Anordnung der Bausteine. Keine strikte Abarbeitung von links nach rechts.
+\item \algo{Strukturierter Text (ST)}: Hochsprachliche Programmiersprache ähnlich zu Pascal/C. Syntax: 
+
+\begin{itemize}
+    \item Variablen mit \lstinline|VAR ... END_VAR| deklarieren
+    \item Anweisungen mit \lstinline|:=| für Zuweisung
+    \item Kontrollstrukturen: \lstinline|IF ... THEN ... ELSE ... END_IF;|, \lstinline|FOR ... TO ... DO ... END_FOR;|
+    \item Funktionen und Funktionsbausteine mit \lstinline|FUNCTION ... END_FUNCTION| bzw. \lstinline|FUNCTION_BLOCK ... END_FUNCTION_BLOCK|
+\end{itemize}
+
+\begin{lstlisting}[language=ST, numbers=none]
+FOR i := 1 TO 3 BY 1 DO
+    AlleAmpeln[i].AKTIV := FALSE;;
+    
+END_FOR;
+
+IF Hauptstr_Ampel.AKTIV THEN
+    Nebenstr_Ampel.L_ROT := TRUE;
+ELSIF NOT Hauptstr_Ampel.AKTIV THEN
+    Nebenstr_Ampel.L_GRUEN := TRUE;
+END_IF;
+\end{lstlisting}
+\item \algo{Ablaufsprache (AS)}: Grafische Sprache für Zustände und Übergänge; ideal für Ablaufsteuerungen.
+\textbf{Aktionen}: 
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{BZ} & \textbf{Beschreibung}  \\
+\midrule
+\textbf{N} & 1 im aktuellen Zustand  \\
+\textbf{R} & Reset (auf 0 setzen)  \\
+\textbf{S} & Set (auf 1 setzen)  \\
+\textbf{P} & 1 nach einem Übergang von 0 zu 1  \\
+\textbf{L} & 1 bis Zeit abgelaufen  \\
+\textbf{D} & 1 nach Zeitverzögerung  \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Alternativ vs. Parallel}
+
+\begin{itemize}
+    \item \algo{Alternativ}: Nur ein Pfad wird ausgeführt. Übergänge mit Bedingungen.
+    \item \algo{Parallel}: Mehrere Pfade werden gleichzeitig ausgeführt. Synchronisation durch spezielle Übergänge.
+\end{itemize}
+
+\section{Objektorientierung (AT)}
+\begin{itemize}
+    \item \datastruct{Datenkapselung}: mit GET und SET Methoden.
+    \item \datastruct{Vererbung}: Mit \lstinline|EXTENDS| Schlüsselwort.
+    \item \datastruct{Interfaces}: Mit \lstinline|INTERFACE ... END_INTERFACE| Blöcken.
+    \item \datastruct{Funktionsblöcke}: Mit \lstinline|FUNCTION_BLOCK ... END_FUNCTION_BLOCK| Blöcken.
+    \begin{lstlisting}[language=ST, numbers=none]
+FUNCTION_BLOCK Fun
+VAR_INPUT in : INT; END_VAR
+VAR_OUTPUT out : INT; END_VAR
+out = in * 2;
+END_FUNCTION_BLOCK
+
+Fun(in := 5, out => result);
+
+    \end{lstlisting}
+\end{itemize}
+
+\section{Automatisierungsarchitekturen}
+
+\begin{itemize}
+    \item \datastruct{Zentral}: Eine SPS steuert alles.
+    \item \datastruct{Dezentral}: Mehrere SPS teilen Aufgaben (Hohe verlässigkeit $\implies$ Kein Gesamtausfall).
+    \item \datastruct{Verteilt}: Steuerung über Netzwerk verteilt.
+    \item \datastruct{Hierarchisch}: Steuerung auf mehreren Ebenen.
+\end{itemize}
+
+\section{Redundanz und Fehler}
+
+\begin{itemize}
+\item \algo{Redundanz}: Mehrfache Ausführung von kritischen Komponenten.
+\begin{itemize}
+    \item \datastruct{Hardware-Redundanz}: Mehrere SPS, Sensoren, Aktoren.
+    \item \datastruct{Software-Redundanz}: Mehrere Programme oder Algorithmen für dieselbe Aufgabe.
+    \item \datastruct{Zeit-Redundanz}: mehrfache Abfrage des gleichen Messwertes in bestimmten Zeitabständen.
+\end{itemize}
+\item \algo{Verfügbarkeit}: Beschreibt, wie häufig oder zuverlässig es betriebsbereit ist.
+\item \algo{Sicherheit}: Fähigkeit eines Systems, gefährliche Fehler zu erkennen und in einen sicheren Zustand zu überführen. 
+
+\end{itemize}
+
+\section{Sicherheits-Integritätslevel}
+Das SIL gibt die erforderliche Risikominderung für sicherheitsbezogene Systeme an.
+
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{SIL} & \textbf{Beschreibung}  \\
+\midrule
+\textbf{SIL 1} & Niedrigste Stufe. Relativ hohe Fehlerwahrscheinlichkeit akzeptiert. Für geringe Risiken, z.B. einfache Alarmsysteme. \\
+\textbf{SIL 2} & Mittlere Stufe. Erhöhte Zuverlässigkeit nötig. Für Anwendungen mit moderatem Gefahrenpotenzial, z.B. Not-Aus-Schalter. \\
+\textbf{SIL 3} & Hohe Stufe. Sehr geringe Fehlerwahrscheinlichkeit. Für schwere Verletzungsgefahr, z.B. Sicherheitsbarrieren, Zugsteuerungen. \\
+\textbf{SIL 4} & Höchste Stufe. Extrem geringe Fehlerwahrscheinlichkeit. Für extrem kritische Systeme, z.B. Kernkraftwerke, Flugzeugsteuerungen. \\
+\bottomrule
+\end{tabularx}
+
+Das SIL ergibt sich aus einer Risikoanalyse: Schwere (S), Häufigkeit (F), Wahrscheinlichkeit (W), Vermeidbarkeit (P).
+\algo{Safty Inegrated Function}: Besteht aus: Sensorik (Fehler erkennen), Logik (SPS - Fehler bewerten) und Aktorik (Sicheren Zustand einleiten).
+
+\section{MooN Architektur}
+Es müssen mindestens $M$ von insgesamt $N$ Komponenten korrekt funktionieren, damit das System eine
+sicherheitsrelevante Aktion ausführt. 
+
+\noindent
+\renewcommand{\cellalign}{l} % Stellt sicher, dass der Text in makecell linksbündig ist
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X  >{\RaggedRight}X}
+\toprule
+\textbf{Architektur} &  \textbf{Sicherheit / Verfügbarkeit} & \textbf{Typische Anwendung} \\
+\midrule
+\textbf{1oo1} &  Niedrig / Hoch & Einfache Steuerungen \\
+\textbf{1oo2} & Mittel / Hoch & \makecell{Prozessüberwachung \\ mit Alarm} \\ % Hier wird der Befehl verwendet
+\textbf{1oo2D} & Hoch / Hoch & SIL 2-3 Anwendungen \\
+\textbf{2oo2} & Sehr Hoch / Niedrig & \makecell{Not-Aus, \\ Reaktorschutz} \\
+\textbf{2oo3} & Hoch / Hoch & Kritische Systeme mit Voting \\
+\textbf{3oo3} & Extrem Hoch / Sehr niedrig & SIL-4 Anwendungen \\
+\bottomrule
+\end{tabularx}
 
 \end{multicols*}
 \end{document}
+

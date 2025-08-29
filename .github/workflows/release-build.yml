@@ -10,6 +10,12 @@ on:
 jobs:
   build_latex:
     runs-on: ubuntu-latest
+
+    # HINZUGEFÜGT: Berechtigungen für diesen Job
+    # Gib dem GITHUB_TOKEN die Erlaubnis, Inhalte (wie Release-Assets) zu schreiben.
+    permissions:
+      contents: write
+
     steps:
       # 1. Repository auf den Runner klonen
       - name: Checkout Repository
@@ -19,29 +25,21 @@ jobs:
       - name: Compile LaTeX Document
         uses: xu-cheng/latex-action@v3
         with:
-          # Der Name der Haupt-TEX-Datei
           root_file: main.tex
-          # latexmk für automatische mehrfache Durchläufe
           compiler: latexmk
           args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
 
-      # 3. NEUER SCHRITT: PDF-Datei umbenennen
-      # Wir benennen die erstellte main.pdf in den Wunschnamen um.
+      # 3. PDF-Datei umbenennen
       - name: Rename PDF
         run: mv main.pdf ITAT-Formelsammlung.pdf
 
-      # 4. ANGEPASSTER SCHRITT: Die umbenannte PDF an den Release anhängen
+      # 4. Die umbenannte PDF an den Release anhängen
       - name: Upload PDF to Release
         uses: actions/upload-release-asset@v1
         with:
-          # Die URL für den Upload (bleibt unverändert)
           upload_url: ${{ github.event.release.upload_url }}
-          # Pfad zur umbenannten Datei
           asset_path: ./ITAT-Formelsammlung.pdf
-          # Name der Datei im Release
           asset_name: ITAT-Formelsammlung.pdf
-          # Dateityp
           asset_content_type: application/pdf
         env:
-          # Token für die Berechtigung zum Upload
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

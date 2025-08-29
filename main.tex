@@ -334,20 +334,37 @@ Empfohlene Methode zur Erstellung von Smart Pointern, da sie effizienter und sic
 \endgroup
 
 \subsection*{std::move}
-
 \lstinline|std::move| markiert ein Objekt als "bewegbar", sodass Ressourcen effizient übernommen werden, statt kopiert zu werden. Das Quellobjekt bleibt gültig, aber sein Zustand ist nicht definiert.
 \begin{lstlisting}[language=C++]
 std::unique_ptr<int> a = std::make_unique<int>(5);
 std::unique_ptr<int> b = std::move(a); 
 \end{lstlisting}
 
-
-
-
-
-
-
-
+\noindent
+\begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
+\toprule
+\textbf{Beziehung} & \textbf{Beschreibung \& C++ Implementierung} \\
+\midrule
+\textbf{Assoziation} & 
+("kennt-ein") Objekte sind unabhängig. \newline
+\textbf{C++:} Roher Zeiger (\texttt{*}) oder Referenz (\texttt{\&}), da keine Besitzübernahme. \newline
+\textbf{Bsp:} \texttt{class Kurs; class Student \{ Kurs* k; \};} \\
+\addlinespace % Fügt etwas Platz hinzu
+\textbf{Aggregation} & 
+("hat-ein") Teil-Ganzes, Lebensdauer der Teile ist \textbf{unabhängig}. \newline
+\textbf{C++:} \texttt{std::shared\_ptr}, um geteilten Besitz darzustellen. \newline
+\textbf{Bsp:} \texttt{class Team \{ std::vector<std::shared\_ptr<Spieler>> p; \};} \\
+\addlinespace
+\textbf{Komposition} & 
+("enthält-ein") Teil-Ganzes, Lebensdauer des Teils ist \textbf{abhängig}. \newline
+\textbf{C++:} \texttt{std::unique\_ptr} für exklusiven Besitz oder direktes Member-Objekt. \newline
+\textbf{Bsp:} \texttt{class Haus \{ std::unique\_ptr<Zimmer> z; \};} \\
+\addlinespace
+\textbf{Vererbung} & 
+("ist-ein") Eine Klasse erbt von einer anderen. \newline
+\textbf{C++:} \texttt{class Student : public Person \{ ... \};} \\
+\bottomrule
+\end{tabularx}
 
 \section{Speicherbereiche}
 

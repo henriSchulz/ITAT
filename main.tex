@@ -1,5 +1,5 @@
 
-\documentclass[10pt, a3paper, landscape]{article}
+\documentclass[9pt, a3paper, landscape]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -25,6 +25,7 @@
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{makecell}
+\usepackage{titlesec}
 
 
 % Seitenränder anpassen für maximale Ausnutzung
@@ -66,22 +67,27 @@
 }
 
 
-% make sections smaller 
+\titleformat{\section}
+    {\normalfont\large\bfseries} % Kleiner: "large" statt "Large"
+    {\thesection}
+    {0.7em} % Weniger Abstand nach Nummer
+    {}
 
-\usepackage{titlesec}
+\titleformat{\subsection}
+    {\normalfont\normalsize\bfseries} % Kleiner: "normalsize" statt "large"
+    {\thesubsection}
+    {0.7em}
+    {}
 
-\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}
+    {0pt}
+    {1.2ex plus 0.5ex minus .1ex} % Weniger Abstand davor
+    {0.7ex plus .1ex}             % Weniger Abstand danach
 
-% reduce space before and after sections
-
-\titlespacing*{\section}{0pt}{1.5ex plus 1ex minus .2ex}{1ex plus .2ex}
-
-% machze subsections kleiner
-
-\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
-
-\titlespacing*{\subsection}{0pt}{1ex plus 1ex minus .2ex}{0.5ex plus .2ex}
-
+\titlespacing*{\subsection}
+    {0pt}
+    {0.8ex plus 0.2ex minus .1ex}
+    {0.5ex plus .1ex}
 
 
 
@@ -99,6 +105,8 @@
 \pagestyle{empty}
 
 \begin{document}
+
+\setlength{\columnsep}{6pt}
 \begin{multicols*}{4}
 
 \section{Kompilierungsprozess}
@@ -262,16 +270,15 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
  \toprule
  \textbf{Methode} & \textbf{Beschreibung} \\
  \midrule
- \lstinline|std::sort(b, e)| & \lstinline|void|  Sortiert einen Bereich \\
- \lstinline|std::find(b, e, v)| & \lstinline|Iterator|  Sucht einen Wert im Bereich \\
- \lstinline|std::reverse(b, e)| & \lstinline|void|  Dreht die Reihenfolge im Bereich um \\
+ \lstinline|std::sort(b, e)| & \lstinline|void|  Sortieren\\
+ \lstinline|std::find(b, e, v)| & \lstinline|Iterator|  Sucht einen Wert \\
+ \lstinline|std::reverse(b, e)| & \lstinline|void|  Umkehren der Reihenfolge \\
  \lstinline|std::max(a, b)| & \lstinline|T|  Gibt das größere von zwei Werten zurück \\
  \lstinline|std::find_if(b, e, p)| & \lstinline|Iterator|  Sucht das erste Element, das das Prädikat erfüllt \\
  \lstinline|std::count_if(b, e, p)| & \lstinline|int|  Zählt Elemente, die das Prädikat erfüllen \\
  \lstinline|std::all_of(b, e, p)| & \lstinline|bool|  Prüft, ob alle Elemente das Prädikat erfüllen \\
  \lstinline|std::any_of(b, e, p)| & \lstinline|bool|  Prüft, ob mindestens ein Element das Prädikat erfüllt \\
  \lstinline|std::max_element(b, e)| & \lstinline|Iterator|  auf das größte Element\\
- \lstinline|std::min_element(b, e)| & \lstinline|Iterator|  Iterator auf das kleinste Element \\
  \lstinline|std::for_each(b, e, f)| & \lstinline|void|  Wendet Funktion \lstinline|f| auf jedes Element im Bereich an \\
 
  \bottomrule
@@ -305,7 +312,7 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
         \item Wenn eine Methode als \lstinline|virtual| deklariert ist, wird zur Laufzeit die passende Methode der abgeleiteten Klasse aufgerufen, auch wenn der Zeiger oder die Referenz den Typ der Basisklasse hat.
         \item Wenn eine Methode nicht als \lstinline|virtual| deklariert ist, wird die Methode abhängig vom Typ des Zeigers oder der Referenz aufgerufen (statischer Bindung).
    \end{itemize}
-    \item \datastruct{Final}: Mit \lstinline|final| kann verhindert werden, dass eine Klasse weiter vererbt wird oder eine Methode überschrieben wird.
+   \item \datastruct{Final}: Mit \lstinline|final| kann verhindert werden, dass eine Klasse weiter vererbt wird oder eine Methode überschrieben wird.
 \end{itemize}
 
 \section{Smart Pointer}
@@ -586,8 +593,8 @@ Fun(in := 5, out => result);
     \item \datastruct{Software-Redundanz}: Mehrere Programme oder Algorithmen für dieselbe Aufgabe.
     \item \datastruct{Zeit-Redundanz}: mehrfache Abfrage des gleichen Messwertes in bestimmten Zeitabständen.
 \end{itemize}
-\item \algo{Verfügbarkeit}: Beschreibt, wie häufig oder zuverlässig es betriebsbereit ist.
-\item \algo{Sicherheit}: Fähigkeit eines Systems, gefährliche Fehler zu erkennen und in einen sicheren Zustand zu überführen. 
+%\item \algo{Verfügbarkeit}: Beschreibt, wie häufig oder zuverlässig es betriebsbereit ist.
+%\item \algo{Sicherheit}: Fähigkeit eines Systems, gefährliche Fehler zu erkennen und in einen sicheren Zustand zu überführen. 
 
 \end{itemize}
 

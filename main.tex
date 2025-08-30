@@ -1,5 +1,5 @@
 
-\documentclass[10pt, landscape]{article}
+\documentclass[9pt, landscape]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -81,12 +81,12 @@
 
 \titlespacing*{\section}
     {0pt}
-    {1.2ex plus 0.5ex minus .1ex} % Weniger Abstand davor
+    {1.0ex plus 0.5ex minus .1ex} % Weniger Abstand davor
     {0.7ex plus .1ex}             % Weniger Abstand danach
 
 \titlespacing*{\subsection}
     {0pt}
-    {0.8ex plus 0.2ex minus .1ex}
+    {0.5ex plus 0.2ex minus .1ex}
     {0.5ex plus .1ex}
 
 
@@ -106,7 +106,7 @@
 
 \begin{document}
 
-\setlength{\columnsep}{6pt}
+\setlength{\columnsep}{5pt}
 \begin{multicols*}{4}
 
 \section{Kompilierungsprozess}
@@ -241,24 +241,29 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
 \end{itemize}
 
 
- \section{String und Vector API}
- \noindent
- \begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
- \toprule
-\textbf{Typ} & \textbf{Methode} & \textbf{Kurzbeschreibung} \\
+ \section{Datenstrukturen Methoden}
+\noindent
+\begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
+\toprule
+\textbf{Typ} & \textbf{Methode} & \textbf{DT} \\
 \midrule
-\texttt{string/vector} & \lstinline|.size()| & Anzahl Elemente \\
-\texttt{string/vector} & \lstinline|.empty()| & Leer? \\
-\texttt{string/vector} & \lstinline|.clear()| & Inhalt löschen \\
-\texttt{vector} & \lstinline|.push_back(val)| & Am Ende anhängen \\
-\texttt{vector} & \lstinline|.pop_back()| & Letztes entfernen \\
-\texttt{string/vector} & \lstinline|.at(idx)| & Element an Position \\
-\texttt{string/vector} & \lstinline|.front()/back()| & Erstes/letztes Element \\
-\texttt{string/vector} & \lstinline|.begin()/end()| & Iteratoren \\
-\texttt{string} & \lstinline|.substr(st,len)| & Teilstring \lstinline|st| \ \\
-\texttt{string} & \lstinline|.find(str)| & Sucht \lstinline|str| \\
+v, l, q & \lstinline|.front()/back()| & T \\
+s & \lstinline|.top()| & T\& \\
+v, l, q, s, m & \lstinline|.size()| & size_t \\
+v, l, q, s, m & \lstinline|.empty()| & bool \\
+v, l & \lstinline|.clear()| & void \\
+v, l, q& \lstinline|.push_back()/push_front()| & void \\
+v, l, q & \lstinline|.pop_back()/pop_front()| & void \\
+s & \lstinline|.push()/pop()| & void \\
+v, l, m & \lstinline|.begin()/end()| & it \\
+l, v & \lstinline|.insert(it,val)| & it  \\
+l & \lstinline|.erase(it)| & it  \\
+v, l & \lstinline|.at(idx)| & T \\
 \bottomrule
 \end{tabularx}
+
+
+
 
  \section{Nützliche std:: Funktionen}
  Benötigt \lstinline|#include <algorithm>| und \lstinline|#include <functional>|
@@ -266,18 +271,16 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
  \noindent
  \begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
  \toprule
- \textbf{Methode} & \textbf{Beschreibung} \\
+ \textbf{Methode} & \textbf{Typ} \\
  \midrule
- \lstinline|std::sort(b, e)| & \lstinline|void|  Sortieren\\
- \lstinline|std::find(b, e, v)| & \lstinline|Iterator|  Sucht einen Wert \\
- \lstinline|std::reverse(b, e)| & \lstinline|void|  Umkehren der Reihenfolge \\
- \lstinline|std::max(a, b)| & \lstinline|T|  Gibt das größere von zwei Werten zurück \\
- \lstinline|std::find_if(b, e, p)| & \lstinline|Iterator|  Sucht das erste Element, das das Prädikat erfüllt \\
- \lstinline|std::count_if(b, e, p)| & \lstinline|int|  Zählt Elemente, die das Prädikat erfüllen \\
- \lstinline|std::all_of(b, e, p)| & \lstinline|bool|  Prüft, ob alle Elemente das Prädikat erfüllen \\
- \lstinline|std::any_of(b, e, p)| & \lstinline|bool|  Prüft, ob mindestens ein Element das Prädikat erfüllt \\
- \lstinline|std::max_element(b, e)| & \lstinline|Iterator|  auf das größte Element\\
- \lstinline|std::for_each(b, e, f)| & \lstinline|void|  Wendet Funktion \lstinline|f| auf jedes Element im Bereich an \\
+ \lstinline|std::sort(b, e)| & \lstinline|void| \\
+ \lstinline|std::find(b, e, v)| & \lstinline|Iterator| \\
+ \lstinline|std::reverse(b, e)| & \lstinline|void|  \\
+ \lstinline|std::max(a, b)| & \lstinline|T| \\
+ \lstinline|std::find_if(b, e, p)| & \lstinline|Iterator|\\
+ \lstinline|std::count_if(b, e, p)| & \lstinline|int|\\
+ \lstinline|std::all/any_of(b, e, p)| & \lstinline|bool| \\
+ \lstinline|std::max_element(b, e)| & \lstinline|Iterator|\\
 
  \bottomrule
  \end{tabularx}
@@ -343,26 +346,18 @@ std::unique_ptr<int> b = std::move(a);
 \noindent
 \begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
 \toprule
-\textbf{Beziehung} & \textbf{Beschreibung \& C++ Implementierung} \\
+\textbf{Beziehung} & \textbf{Beschreibung } \\
 \midrule
-\textbf{Assoziation} & 
-("kennt-ein") Objekte sind unabhängig. \newline
-\textbf{C++:} Roher Zeiger (\texttt{*}) oder Referenz (\texttt{\&}), da keine Besitzübernahme. \newline
-\textbf{Bsp:} \texttt{class Kurs; class Student \{ Kurs* k; \};} \\
-\addlinespace % Fügt etwas Platz hinzu
-\textbf{Aggregation} & 
-("hat-ein") Teil-Ganzes, Lebensdauer der Teile ist \textbf{unabhängig}. \newline
-\textbf{C++:} \texttt{std::shared\_ptr}, um geteilten Besitz darzustellen. \newline
-\textbf{Bsp:} \texttt{class Team \{ std::vector<std::shared\_ptr<Spieler>> p; \};} \\
-\addlinespace
-\textbf{Komposition} & 
-("enthält-ein") Teil-Ganzes, Lebensdauer des Teils ist \textbf{abhängig}. \newline
-\textbf{C++:} \texttt{std::unique\_ptr} für exklusiven Besitz oder direktes Member-Objekt. \newline
-\textbf{Bsp:} \texttt{class Haus \{ std::unique\_ptr<Zimmer> z; \};} \\
-\addlinespace
-\textbf{Vererbung} & 
-("ist-ein") Eine Klasse erbt von einer anderen. \newline
-\textbf{C++:} \texttt{class Student : public Person \{ ... \};} \\
+\textbf{Assoziation} & ("kennt-ein") Objekte sind unabhängig. \newline
+\textbf{C++:} Roher Zeiger (\texttt{*}) oder Referenz (\texttt{\&}), da keine Besitzübernahme. \\
+
+\textbf{Aggregation} & ("hat-ein") Teil-Ganzes, Lebensdauer der Teile ist \textbf{unabhängig}. \newline
+\textbf{C++:} \texttt{std::shared\_ptr}, um geteilten Besitz darzustellen. \\
+
+
+\textbf{Komposition} & ("enthält-ein") Teil-Ganzes, Lebensdauer des Teils ist \textbf{abhängig}. \newline
+\textbf{C++:} \texttt{std::unique\_ptr} für exklusiven Besitz oder direktes Member-Objekt. \\
+\textbf{Vererbung} & ("ist-ein") Eine Klasse erbt von einer anderen. \\
 \bottomrule
 \end{tabularx}
 
@@ -438,8 +433,8 @@ Benötigt \lstinline|#include <unordered_map>|. \lstinline|std::unordered_map<Ke
 \textbf{Methode} & \textbf{Beschreibung} \\
 \midrule
 \lstinline|map[key]| & Zugriff/Ändern eines Werts \\
-\lstinline|map.insert(pair)| & Einfügen, falls Schlüssel neu \\
-\lstinline|map.find(key)| & Sucht Schlüssel, Iterator oder \lstinline|end()| \\
+\lstinline|map.insert(\{k,v\})| & Einfügen, falls Schlüssel neu \\
+\lstinline|map.find(key)| & Sucht Schlüssel, Iterator (\lstinline|it->first|, \lstinline|it->second|) oder \lstinline|end()| \\
 \lstinline|map.erase(key)| & Löscht Schlüssel \\
 \lstinline|map.size()| & Anzahl Elemente \\
 \bottomrule
@@ -472,17 +467,15 @@ Benötigt \lstinline|#include <unordered_map>|. \lstinline|std::unordered_map<Ke
 
 
 \section{Automatisierungstechnik}
-  
-\begin{center}
-    \includegraphics[width=0.8\linewidth]{assets/ATC.png}
-\end{center}
-
-\datastruct{Speicherprogrammierbare Steuerung (SPS)}: Industrieller Computer zur Steuerung von Maschinen und Prozessen. SPS-Zyklus:
+  \datastruct{Speicherprogrammierbare Steuerung (SPS)}: Industrieller Computer zur Steuerung von Maschinen und Prozessen. SPS-Zyklus:
 \begin{itemize}
     \item \algo{Eingabe lesen}: Alle Eingänge (Sensoren, Taster) werden eingelesen (Vom PAE).
     \item \algo{Programm ausführen}: Das Steuerungsprogramm wird basierend auf den Eingaben ausgeführt.
     \item \algo{Ausgabe schreiben}: Alle Ausgänge (Aktoren, Lampen) werden entsprechend dem Programmzustand gesetzt (Vom PAA).
 \end{itemize}
+\begin{center}
+    \includegraphics[width=0.8\linewidth]{assets/ATC.png}
+\end{center}
 
 \begin{center}
     \includegraphics[width=0.5\linewidth]{assets/ATT.png}
@@ -646,13 +639,13 @@ sicherheitsrelevante Aktion ausführt.
 \renewcommand{\cellalign}{l} % Stellt sicher, dass der Text in makecell linksbündig ist
 \begin{tabularx}{\linewidth}{l >{\RaggedRight}X  >{\RaggedRight}X}
 \toprule
-\textbf{Architektur} &  \textbf{Sicherheit / Verfügbarkeit} & \textbf{Typische Anwendung} \\
+\textbf{Architektur} &  \textbf{Sicherheit / Verfügbarkeit} & \textbf{Anwendung} \\
 \midrule
 \textbf{1oo1} &  Niedrig / Hoch & Einfache Steuerungen \\
-\textbf{1oo2} & Mittel / Hoch & \makecell{Prozessüberwachung \\ mit Alarm} \\ % Hier wird der Befehl verwendet
+\textbf{1oo2} & Mittel / Hoch & Prozessüberwachung mit Alarm \\ % Hier wird der Befehl verwendet
 \textbf{1oo2D} & Hoch / Hoch & SIL 2-3 Anwendungen \\
-\textbf{2oo2} & Sehr Hoch / Niedrig & \makecell{Not-Aus, \\ Reaktorschutz} \\
-\textbf{2oo3} & Hoch / Hoch & Kritische Systeme mit Voting \\
+\textbf{2oo2} & Sehr Hoch / Niedrig & Not-Aus, Reaktorschutz \\
+\textbf{2oo3} & Hoch / Hoch & Kritische Systeme \\
 \textbf{3oo3} & Extrem Hoch / Sehr niedrig & SIL-4 Anwendungen \\
 \bottomrule
 \end{tabularx}

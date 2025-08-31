@@ -1,27 +1,22 @@
-# Name des Workflows
+
 name: Build LaTeX PDF on Release
 
-# Trigger: Läuft nur, wenn ein neuer Release erstellt wird
+
 on:
   release:
     types: [created]
 
-# Jobs, die ausgeführt werden sollen
+
 jobs:
   build_latex:
     runs-on: ubuntu-latest
-
-    # HINZUGEFÜGT: Berechtigungen für diesen Job
-    # Gib dem GITHUB_TOKEN die Erlaubnis, Inhalte (wie Release-Assets) zu schreiben.
     permissions:
       contents: write
 
     steps:
-      # 1. Repository auf den Runner klonen
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. LaTeX-Dokument kompilieren
       - name: Compile LaTeX Document
         uses: xu-cheng/latex-action@v3
         with:
@@ -29,11 +24,9 @@ jobs:
           compiler: latexmk
           args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
 
-      # 3. PDF-Datei umbenennen
       - name: Rename PDF
         run: mv main.pdf ITAT-Formelsammlung.pdf
 
-      # 4. Die umbenannte PDF an den Release anhängen
       - name: Upload PDF to Release
         uses: actions/upload-release-asset@v1
         with:

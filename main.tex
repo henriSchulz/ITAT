@@ -26,6 +26,8 @@
 \usepackage{array}
 \usepackage{makecell}
 \usepackage{titlesec}
+\usepackage{etoolbox}
+\AtBeginEnvironment{tabularx}{\footnotesize}
 
 
 % Seitenränder anpassen für maximale Ausnutzung
@@ -167,16 +169,15 @@ $\downarrow$       & \texttt{\&\&}            & \textbf{Binär:} Logisches UND \
 \toprule
 \textbf{Datentyp} & \textbf{Bytes} & \textbf{Wertebereich} \\
 \midrule
-\lstinline|bool| & 1 & \texttt{true} oder \texttt{false} \\
 \lstinline|char| & 1 & -128 bis 127 \\
 \lstinline|unsigned char| & 1 & 0 bis 255 \\
 \lstinline|short| & 2 & -32.768 bis 32.767 \\
 \lstinline|unsigned short| & 2 & 0 bis 65.535 \\
-\lstinline|int| & 4 & -2.147.483.648 bis 2.147.483.647 \\
-\lstinline|unsigned int| & 4 & 0 bis 4.294.967.295 \\
+\lstinline|int| & 4 & $-2^{31}$ bis $2^{31} -1$ \\
+\lstinline|unsigned int| & 4 & 0 bis $2^{32} -1$ \\
 \lstinline|long long| & 8 & ca. -9,2 x 10$^{18}$ bis 9,2 x 10$^{18}$ \\
-\lstinline|float| & 4 & ca. $\pm$3.4 x 10$^{38}$ (7 Dezimalstellen) \\
-\lstinline|double| & 8 & ca. $\pm$1.8 x 10$^{308}$ (15 Dezimalstellen) \\
+\lstinline|float| & 4 & ca. $\pm$3.4 x 10$^{38}$ (7 Stellen) \\
+\lstinline|double| & 8 & ca. $\pm$1.8 x 10$^{308}$ (15 Stelen) \\
 \bottomrule
 \end{tabularx}
 
@@ -233,6 +234,7 @@ Benötigt \lstinline|#include <vector>|.
 Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Containers (wie \lstinline|std::vector|, \lstinline|std::list|, etc.) zu iterieren. 
 \begin{itemize}
     \item \lstinline|auto it = vec.begin();|: Iterator auf Anfang
+    \item \lstinline|auto it = vec.end();|: Iterator hinter das letzte Element
     \item \lstinline|*it|: Zugriff auf Element
     \item \lstinline|++it|, \lstinline|--it|: Vorwärts/Rückwärts bewegen
     \item \lstinline|it != vec.end()|: Vergleich mit Ende
@@ -247,18 +249,17 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
 \toprule
 \textbf{Typ} & \textbf{Methode} & \textbf{DT} \\
 \midrule
-v, l, q & \lstinline|.front()/back()| & T \\
-s & \lstinline|.top()| & T \\
 v, l, q, s, m & \lstinline|.size()| & size\_t \\
 v, l, q, s, m & \lstinline|.empty()| & bool \\
-v, l & \lstinline|.clear()| & void \\
+v, l, q & \lstinline|.front()/back()| & T \\
 v, l, q& \lstinline|.push_back()/push_front()| & void \\
 v, l, q & \lstinline|.pop_back()/pop_front()| & void \\
-s & \lstinline|.push()/pop()| & void \\
 v, l, m & \lstinline|.begin()/end()| & it \\
 l, v & \lstinline|.insert(it,val)| & it  \\
+v, l & \lstinline|.clear()| & void \\
+s & \lstinline|.top()| & T \\
+s & \lstinline|.push()/pop()| & void \\
 l & \lstinline|.erase(it)| & it  \\
-v, l & \lstinline|.at(idx)| & T \\
 \bottomrule
 \end{tabularx}
 
@@ -328,12 +329,24 @@ Smart Pointer sind Klassen, die die Verwaltung von dynamisch allozierten Objekte
 \subsection*{make\_shared / make\_unique}
 
 \begingroup\sloppy
-Empfohlene Methode zur Erstellung von Smart Pointern, da sie effizienter und sicherer ist als die direkte Verwendung von \lstinline|new|.
-
+Empfohlene Methode zur Erstellung von Smart Pointern; sicherer und effizienter als \lstinline|new|.
 \begin{itemize}
-    \item \lstinline|auto ptr = std::make_unique<T>();|: Erstellt einen \lstinline|unique_ptr| zu einem neuen Objekt vom Typ \lstinline|T|.
-    \item \lstinline|auto ptr = std::make_shared<T>();|: Erstellt einen \lstinline|shared_ptr| zu einem neuen Objekt vom Typ \lstinline|T|.
+    \item \lstinline|auto p = std::make_unique<T>();|
+    \item \lstinline|auto p = std::make_shared<T>();| 
+    \item optional: Konstruktorparameter in den Klammern
 \end{itemize}
+
+\noindent
+\begin{tabularx}{\linewidth}{l l}
+\toprule
+\textbf{Aktion} & \textbf{Code} \\
+\midrule
+Zugriff auf das Objekt & \lstinline|p->member| \\
+Zugriff auf den rohen Zeiger & \lstinline|p.get()| \\
+\bottomrule
+\end{tabularx}
+
+
 \endgroup
 
 \subsection*{std::move}
@@ -413,14 +426,12 @@ Speicher und initialisiert  \\
 
 \begin{itemize} 
 \item \datastruct{Lineares Sondieren}: \formel{h_i(k) = (h(k) + i) \mod m}
-\item \datastruct{Quadratisches Sondieren}: \formel{h_i(k) = (h(k) + c_1 \cdot i + c_2 \cdot i^2) \mod m}
-\begin{itemize}
-    \item \formel{c_1, c_2}: Konstanten (z.B. 0.5)
-\end{itemize}
+\item \datastruct{Quadratisches Sondieren}:  \formel{h_i(k) = (h(k) + c_1 \cdot i + c_2 \cdot i^2) \mod m} (meist $c_1 = 0, c_2 = 1$)
+
 \item \datastruct{Doppeltes Hashing}: \formel{h_i(k) = (h(k) + i \cdot h'(k)) \mod m}
 
 \begin{itemize}
-    \item \formel{h'(k)}: Sekundäre Hashfunktion (z.B. \formel{1 + (k \mod (m'))} wobei \formel{m'} eine Primzahl kleiner als \formel{m} ist)
+    \item \formel{h'(k)}: Zweite Hashfunktion, z.B. \formel{1 + (k \mod m')}, mit \formel{m'} (Primz.) < \formel{m}
 \end{itemize}
 \end{itemize}
 
@@ -433,12 +444,12 @@ Benötigt \lstinline|#include <unordered_map>|. \lstinline|std::unordered_map<Ke
 \textbf{Methode} & \textbf{Beschreibung} \\
 \midrule
 \lstinline|map[key]| & Zugriff/Ändern eines Werts \\
-\lstinline|map.insert(\{k,v\})| & Einfügen, falls Schlüssel neu \\
+\lstinline|map.insert(\{k,v\})| & Einfügen (pair<it, bool>). Bsp.: \lstinline|auto [it,inserted] = map.insert(...)| \\
 \lstinline|map.find(key)| & Sucht Schlüssel, Iterator (\lstinline|it->first|, \lstinline|it->second|) oder \lstinline|end()| \\
-\lstinline|map.erase(key)| & Löscht Schlüssel \\
-\lstinline|map.size()| & Anzahl Elemente \\
+\lstinline|map.erase(key)| & Löscht Schlüssel (\lstinline|int| 0 o. 1 Element gelöscht) \\
 \bottomrule
 \end{tabularx}
+\datastruct{Loop}: \lstinline|for(auto [k,v] : map) { ... }|
 
 \section{Vector vs. List}
 
@@ -517,8 +528,8 @@ END_VAR
 \begin{itemize}
 \item \algo{Kontaktplan}: Grafische Programmiersprache, die elektrische Schaltpläne nachbildet.
 \begin{itemize}
-    \item \texttt{--][--}: Öffner
-    \item \texttt{--]\textbackslash{}[--}: Schließer
+    \item \texttt{--][--}: Schließer
+    \item \texttt{--]\textbackslash{}[--}: Öffner
     \item \texttt{--()\!--}: Spule (Aktor)
 \end{itemize}
 \item \algo{Funktionsbausteinsprache (FBS)}: Logik-Gatter, FlipFlops, TON, TOF werden als Bausteine dargestellt und verbunden.
@@ -537,7 +548,6 @@ END_VAR
 \begin{lstlisting}[language=ST, numbers=none]
 FOR i := 1 TO 3 BY 1 DO
     AlleAmpeln[i].AKTIV := FALSE;;
-    
 END_FOR;
 
 IF Hauptstr_Ampel.AKTIV THEN

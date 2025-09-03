@@ -149,16 +149,21 @@
 \noindent % Verhindert Einrückung
 \begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
 \toprule
-\textbf{Priorität} & \textbf{Operator} & \textbf{Beschreibung} \\
+\textbf{Operator} & \textbf{Beschreibung} \\
 \midrule
-\textbf{Hoch}      & \texttt{!} \texttt{*} \texttt{\&} & \textbf{Unär:} Log. NICHT, Deref., Adresse \\
-$\downarrow$       & \texttt{*} \texttt{/}  & \textbf{Binär:} Multiplikation, Division \\
-$\downarrow$       & \texttt{+} \texttt{-}  & \textbf{Binär:} Addition, Subtraktion \\
-$\downarrow$       & \texttt{<<} \texttt{>>} & \textbf{Binär:} Bit-Shift Links/Rechts \\
-$\downarrow$       & \texttt{\&}             & \textbf{Binär:} Bitweises UND \\
-$\downarrow$       & \texttt{|}             & \textbf{Binär:} Bitweises ODER \\
-$\downarrow$       & \texttt{\&\&}            & \textbf{Binär:} Logisches UND \\
-\textbf{Niedrig}   & \texttt{||}            & \textbf{Binär:} Logisches ODER \\
+\texttt{x++} & Postfix\\
+\texttt{++x} \texttt{*} \textbf{\&} \textbf{!} & Präfix, Ref/Deref, Pointer, NOT (unär) \\
+\textbf{* / \%} & Muliplikativ \\
+\texttt{+} \texttt{-}  & Additiv  \\
+\texttt{<<} \texttt{>>} & Bit-Shift Links(add 0)/Rechts(del 0) \\
+\textbf{< > >= <=} & Vergleich \\
+\textbf{ == !=} & Gleichheit\\
+\texttt{\&}             & Bitweises UND \\
+\textbf{\^} & biteweise XOR \\
+\texttt{|}             & Bitweises ODER  \\
+\texttt{\&\&}            & Binär: Logisches UND \\
+\texttt{||}            & Logisches ODER \\
+\textbf{= *= += *=} & zusammengesetzte Ausdrücke \\
 \bottomrule
 \end{tabularx}
 

@@ -92,7 +92,7 @@ python cleanup.py
 
 ## 📄 Lizenz
 
-Dieses Projekt dient als persönliche Studienreferenz. Bei Verwendung oder Weiterverteilung bitte entsprechende Quellenangaben beachten.
+MIT License. Siehe `LICENSE` für Details.
 
 ## 🤝 Beiträge
 

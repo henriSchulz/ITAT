@@ -1,5 +1,5 @@
 
-\documentclass[9pt, landscape]{article}
+\documentclass[8pt, landscape]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -31,7 +31,7 @@
 
 
 % Seitenränder anpassen für maximale Ausnutzung
-\geometry{a3paper, left=1.2cm, right=1.2cm, top=1cm, bottom=1cm, landscape}
+\geometry{a3paper, left=1cm, right=1cm, top=1cm, bottom=1cm, landscape}
 
 % --- C++ Style for listings ---
 \lstdefinestyle{cpp_style}{
@@ -72,24 +72,24 @@
 \titleformat{\section}
     {\normalfont\large\bfseries} % Kleiner: "large" statt "Large"
     {\thesection}
-    {0.7em} % Weniger Abstand nach Nummer
+    {0.6em} % Weniger Abstand nach Nummer
     {}
 
 \titleformat{\subsection}
     {\normalfont\normalsize\bfseries} % Kleiner: "normalsize" statt "large"
     {\thesubsection}
-    {0.7em}
+    {0.6em}
     {}
 
 \titlespacing*{\section}
     {0pt}
-    {1.0ex plus 0.5ex minus .1ex} % Weniger Abstand davor
-    {0.7ex plus .1ex}             % Weniger Abstand danach
+    {0.5ex plus 0.3ex minus .1ex} % Weniger Abstand davor
+    {0.2ex plus .1ex}             % Weniger Abstand danach
 
 \titlespacing*{\subsection}
     {0pt}
-    {0.5ex plus 0.2ex minus .1ex}
-    {0.5ex plus .1ex}
+    {0.3ex plus 0.2ex minus .1ex}
+    {0.3ex plus .1ex}
 
 
 
@@ -108,8 +108,38 @@
 
 \begin{document}
 
-\setlength{\columnsep}{5pt}
+\setlength{\columnsep}{4pt}
 \begin{multicols*}{4}
+
+\section{Git}
+
+\begin{itemize} 
+    \item \lstinline|rebase| : Überträgt Commits auf einen anderen Branch, sorgt für lineare Historie.
+    \item \lstinline|rebase -i|: Rebase interaktiv, um spezifische Commits auszuwählen oder zu bearbeiten.
+    \item \lstinline|revert| : Macht einen bestimmten Commit rückgängig, indem ein neuer Commit erstellt wird.
+    \item \lstinline|branch -f| : Erzwingt das Verschieben eines Branches auf einen bestimmten Commit.
+\end{itemize}
+
+\section{Programmierparadigmen}
+
+\algo{Sprache}: \textbf{Syntax}: Definition aller zulässigen Wörter, \textbf{Semantik}: Bedeutung der Wörter, \textbf{Grammatik}:  Zusammenhang zwischen den Zeichen und den Wörtern.
+
+\noindent
+
+\begin{center}
+\begin{tabularx}{0.9\columnwidth}{l X l}
+\toprule
+\textbf{Paradigma} & \textbf{Beschreibung} & \textbf{Bsp.} \\
+\midrule
+Imperativ & Anweisungen, Variablen & Assembler \\
+Prozedural & Unterprogramme, Algo. & C, Pascal \\
+Funktional & Mathematische Funktionen & Haskell, Lisp \\
+Logikbasiert & Logische Regeln & Prolog \\
+Objektorientiert & Objekte, Klassen & C++, Java \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
 
 \section{Kompilierungsprozess}
 
@@ -182,7 +212,7 @@
 \lstinline|unsigned int| & 4 & 0 bis $2^{32} -1$ \\
 \lstinline|long long| & 8 & ca. -9,2 x 10$^{18}$ bis 9,2 x 10$^{18}$ \\
 \lstinline|float| & 4 & ca. $\pm$3.4 x 10$^{38}$ (7 Stellen) \\
-\lstinline|double| & 8 & ca. $\pm$1.8 x 10$^{308}$ (15 Stelen) \\
+\lstinline|double| & 8 & ca. $\pm$1.8 x 10$^{308}$ (15 Stellen) \\
 \bottomrule
 \end{tabularx}
 
@@ -228,8 +258,7 @@ Lambda Funktionen sind anonyme Funktionen, die direkt im Code definiert werden k
     \item \textbf{Capture}: Bestimmt, welche Variablen aus dem umgebenden Kontext verwendet werden können.
     \begin{itemize}
         \item \lstinline|[]|: Keine Variablen werden erfasst.
-        \item \lstinline|[=]|: Alle Variablen werden per Wert erfasst.
-        \item \lstinline|[&]|: Alle Variablen werden per Referenz erfasst.
+        \item \lstinline|[=] / [&]|: Alle Variablen werden per Wert / Ref. erfasst.
         \item \lstinline|[x, &y]|: Variable \lstinline|x| per Wert \lstinline|y| per Referenz.
     \end{itemize}
 \end{itemize}
@@ -306,15 +335,19 @@ l & \lstinline|.erase(it)| & it  \\
 \item \datastruct{Konstruktoren}: Immer Explicit angeben 
 \item \datastruct{Destruktoren}: Immer Virtual angeben, wenn die Klasse vererbt wird
 \item \datastruct{Membervariablen}: Immer mit \lstinline|m\_| oder \lstinline|\_m| kennzeichnen. Keine gleichen Namen wie Parameter im Konstruktor verwenden.
-\item \datastruct{Funktionen / Methoden}: Nicht komplett inline definieren: \lstinline|int add(int a, int b) {return a+b}|
+\item \datastruct{Funktionen / Methoden}: Nicht komplett inline definieren: \lstinline|int add(int a, int b) {return a+b;}|
 \item \datastruct{Void als Parameter}: Nie \lstinline|void| als Parameter verwenden: \lstinline|int foo(void);|
 \end{itemize}
 
 \section{Objektorientierung}
 
 \begin{itemize}
+    \item \datastruct{Klassen}: Bauplan für Objekte, die Daten (Attribute) und Funktionen (Methoden) kapseln.
+    \item \datastruct{Objekte}: Instanzen von Klassen, die konkrete Werte für die Attribute besitzen.
+    \item \datastruct{Vererbung}: Ermöglicht es einer Klasse (abgeleitete Klasse), Eigenschaften und Methoden einer anderen Klasse (Basisklasse) zu übernehmen.
+    \item \datastruct{Polymorphismus}: Fähigkeit, dass eine Methode in verschiedenen Klassen unterschiedlich implementiert werden kann. Ermöglicht durch virtuelle Funktionen.
    \item \datastruct{Konstruktor / Destruktor}: Konstruktoren werden in verschachtelten Klassen von der innersten zur äußersten Klasse aufgerufen. Destruktoren in umgekehrter Reihenfolge.
-   \item \datastruct{Virtual / Overrite}: Virtuelle Funktionen werden in der Basisklasse mit \lstinline|virtual| deklariert und in der abgeleiteten Klasse mit \lstinline|override| überschrieben.
+   \item \datastruct{Virtual / Override}: Virtuelle Funktionen werden in der Basisklasse mit \lstinline|virtual| deklariert und in der abgeleiteten Klasse mit \lstinline|override| überschrieben.
    \begin{itemize}
         \item Wenn eine Methode als \lstinline|virtual| deklariert ist, wird zur Laufzeit die passende Methode der abgeleiteten Klasse aufgerufen, auch wenn der Zeiger oder die Referenz den Typ der Basisklasse hat.
         \item Wenn eine Methode nicht als \lstinline|virtual| deklariert ist, wird die Methode abhängig vom Typ des Zeigers oder der Referenz aufgerufen (statischer Bindung).
@@ -593,18 +626,18 @@ END_IF;
 \item \datastruct{Funktionsblöcke}: {\sloppy Mit \lstinline|FUNCTION_BLOCK ... END_FUNCTION_BLOCK| Blöcken.}
     \begin{lstlisting}[language=ST, numbers=none]
 FUNCTION_BLOCK Fun
-VAR_INPUT in : INT; END_VAR
-VAR_OUTPUT out : INT; END_VAR
-out = in * 2;
+VAR_INPUT in : REAL; END_VAR
+VAR_OUTPUT out : REAL; END_VAR
+out = in * 2.0;
 END_FUNCTION_BLOCK
 
-Fun(in := 5, out => result);
+Fun(in := 5.3, out => result);
 
     \end{lstlisting}
 \end{itemize}
 
 \section{Automatisierungsarchitekturen}
-
+\includegraphics[width=0.6\linewidth]{assets/ATK.png}
 \begin{itemize}
     \item \datastruct{Zentral}: Eine SPS steuert alles.
     \item \datastruct{Dezentral}: Mehrere SPS teilen Aufgaben (Hohe verlässigkeit $\implies$ Kein Gesamtausfall).
@@ -662,9 +695,12 @@ sicherheitsrelevante Aktion ausführt.
 \textbf{2oo2} & Sehr Hoch / Niedrig & Not-Aus, Reaktorschutz \\
 \textbf{2oo3} & Hoch / Hoch & Kritische Systeme \\
 \textbf{3oo3} & Extrem Hoch / Sehr niedrig & SIL-4 Anwendungen \\
+
 \bottomrule
 \end{tabularx}
 \endgroup
+
+\algo{Fehler vs. Ausfall}: Fehler = Abweichung von der Norm. Ausfall = Fehler, der zu einem Systemausfall führt.
 
 \end{multicols*}
 \end{document}

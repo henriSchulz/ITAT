@@ -119,6 +119,7 @@
     \item \lstinline|revert| : Macht einen bestimmten Commit rückgängig, indem ein neuer Commit erstellt wird.
     \item \lstinline|branch -f| : Erzwingt das Verschieben eines Branches auf einen bestimmten Commit.
 \end{itemize}
+\algo{Guter Stil}: Feature based Branches, kleine Commits, aussagekräftige Commit-Nachrichten.
 
 \section{Programmierparadigmen}
 
@@ -160,7 +161,7 @@ Objektorientiert & Objekte, Klassen & C++, Java \\
     \item \datastruct{Implicit Casting}: Automatische Typumwandlung durch den Compiler.
     \begin{itemize}
         \item \lstinline|int a = 5.4;| $\implies$ a wird zu einem int (5)
-        \item \lstinline|float b = 7/2;| $\implies$ Ganzzahlige Division, Ergebnis 3 wird zu double (3.0)
+        \item \lstinline|float b = 7/2;| $\implies$ Ganzzahlige Division, Ergebnis 3 wird zu float (3.0)
         \item \lstinline|float c = 7/2.0;| $\implies$ Einer der Werte ist float, Ergebnis 3.5
         \item \lstinline|double d = 'A' - 12;| $\implies$ char wird zu int (65), dann - 12 (53), dann zu double (53.0)
         \item \lstinline|int e = true + 3;| $\implies$ bool wird zu int (1) + 3 (4), dann zu int (4)
@@ -275,7 +276,7 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
     \item \datastruct{Objekte}: Instanzen von Klassen, die konkrete Werte für die Attribute besitzen.
     \item \datastruct{Vererbung}: Ermöglicht es einer Klasse (abgeleitete Klasse), Eigenschaften und Methoden einer anderen Klasse (Basisklasse) zu übernehmen.
     \item \datastruct{Polymorphismus}: Fähigkeit, dass eine Methode in verschiedenen Klassen unterschiedlich implementiert werden kann. Ermöglicht durch virtuelle Funktionen.
-   \item \datastruct{Konstruktor / Destruktor}: Konstruktoren werden in verschachtelten Klassen von der innersten zur äußersten Klasse aufgerufen. Destruktoren in umgekehrter Reihenfolge.
+   \item \datastruct{Konstruktor / Destruktor}: Zuerst wird der Konstruktor der Basisklasse (Elternklasse) aufgerufen, danach der Konstruktor der abgeleiteten Klasse (Kindklasse). Destruktoren werden in exakt umgekehrter Reihenfolge aufgerufen
    \item \datastruct{Virtual / Override}: Virtuelle Funktionen werden in der Basisklasse mit \lstinline|virtual| deklariert und in der abgeleiteten Klasse mit \lstinline|override| überschrieben.
    \begin{itemize}
         \item Wenn eine Methode als \lstinline|virtual| deklariert ist, wird zur Laufzeit die passende Methode der abgeleiteten Klasse aufgerufen, auch wenn der Zeiger oder die Referenz den Typ der Basisklasse hat.
@@ -283,6 +284,8 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
    \end{itemize}
    \item \datastruct{Final}: Mit \lstinline|final| kann verhindert werden, dass eine Klasse weiter vererbt wird oder eine Methode überschrieben wird.
 \end{itemize}
+\algo{Liskovsches Substitutionsprinzip}: Besagt, dass Objekte einer Unterklasse in der Lage sein müssen, Objekte ihrer Oberklasse zu ersetzen, ohne die korrekte Funktionsweise eines Programms zu beeinträchtigen.
+
 
 \section{Überladen von Funktionen}
 
@@ -309,7 +312,10 @@ Empfohlene Methode zur Erstellung von Smart Pointern; sicherer und effizienter a
 \begin{itemize}
     \item \lstinline|auto p = std::make_unique<T>();|
     \item \lstinline|auto p = std::make_shared<T>();| 
-    \item optional: Konstruktorparameter in den Klammern
+    \item \lstinline|auto p = std::make_shared<T>(arg1, arg2);| (mit Konstruktorargumenten)
+    \begin{itemize}
+        \item Objekt direkt übergeben: \lstinline|std::make_shared<T>(T(...))|
+    \end{itemize}
 \end{itemize}
 
 \noindent
@@ -321,6 +327,8 @@ Zugriff auf das Objekt & \lstinline|p->member| \\
 Zugriff auf den rohen Zeiger & \lstinline|p.get()| \\
 \bottomrule
 \end{tabularx}
+
+\datastruct{Resource Acquisition Is Initialization}: Die Ressource wird im Konstruktor eines Objekts erworben ("Acquisition/Initialization") und im Destruktor automatisch wieder freigegeben ($\implies$ Prinzip hinter Smart Pointern).
 
 
 \endgroup
@@ -440,8 +448,16 @@ Benötigt \lstinline|#include <unordered_map>|. \lstinline|std::unordered_map<Ke
 \textbf{Speicherverbrauch} & \datastruct{Vector}: Weniger Overhead, da nur ein Speicherblock. \newline \datastruct{List}: Mehr Overhead durch Zeiger in jedem Knoten. \\
 \bottomrule
 \end{tabularx}
-
-\section{Von Neumann Zyklus}
+Einfach verkettet: nur vorwärts; doppelt verkettet: vor- und rückwärts, mehr Speicher.
+\section{Rechnerarchitektur}
+\begin{itemize}
+\item \textbf{Harvard-Architektur}: Getrennte Speicher für Daten und Befehle, paralleler Zugriff möglich.
+\item textbf{Von Neumann Flaschenhals}: Gemeinsamer Bus für Daten und Befehle, begrenzt die Geschwindigkeit.
+\item \textbf{CISC}: Viele komplexe Befehle, Hardware aufwendig, langsamer. 
+\item \textbf{RISC}: Wenige, einfache Befehle, Hardware einfach, schneller, Pipelining möglich.
+\item \textbf{Pipelining}: Überlappende Ausführung von Befehlen in verschiedenen Stadien des Zyklus.
+\end{itemize}
+\subsection{Von Neumann Zyklus}
 \begin{itemize}
     \item \datastruct{Fetch}: Der Prozessor holt den nächsten Befehl aus dem Speicher (RAM) und lädt ihn in das Befehlsregister.
     \item \datastruct{Decode}: Der Prozessor dekodiert den Befehl, um zu verstehen, welche Operation ausgeführt werden soll und welche Operanden benötigt werden.
@@ -450,7 +466,8 @@ Benötigt \lstinline|#include <unordered_map>|. \lstinline|std::unordered_map<Ke
     \item \datastruct{Write Back}: Das Ergebnis der Operation wird zurück in den Speicher oder die Register geschrieben.
 \end{itemize}
 
-\textbf{Harvard-Architektur}: Getrennte Speicher für Daten und Befehle, paralleler Zugriff möglich.
+
+
 
 
 \section{Automatisierungstechnik}
@@ -468,11 +485,16 @@ Benötigt \lstinline|#include <unordered_map>|. \lstinline|std::unordered_map<Ke
     \includegraphics[width=0.5\linewidth]{assets/ATT.png}
 \end{center}
 
+\algo{Latenzzeit}: Zeit vom Eintreten eines Ereignisses bis zur Reaktion der Steuerung.
+\algo{Eingangsverzögerung}: Zeit vom Eintreten eines Ereignisses bis zum Einlesen der Eingänge.
 \algo{Worst-Case}: Doppelte der Zykluszeit (Eingabe lesen + Programm ausführen + Ausgabe schreiben).
+
 
 \begin{center}
     \includegraphics[width=0.8\linewidth]{assets/ATP.png}
 \end{center}
+
+
 
 \section{Prozessklassifizierung}
 

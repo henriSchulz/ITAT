@@ -241,27 +241,7 @@ Overflow = Zugewiesene oder berechnete Zahl liegt außerhalb des darstellbaren B
     \item \algo{Wichtig}: \textit{Jede Definition ist auch eine Deklaration!}
 \end{itemize}
 
-\section{Functional und Lambda}
 
-Benötigt \lstinline|#include <functional>|
-
-\lstinline|std::function<T>| ist nützlich um Funktionen als Objekt zu deklarieren, speichern und übergeben zu können. \algo{Beispiel}:
-\lstinline|std::function<int(int,int)> sum = [](int a, int b) { return a + b; };|
-
-\datastruct{Lambda Funktionen}
-
-Lambda Funktionen sind anonyme Funktionen, die direkt im Code definiert werden können. Sie haben die folgende Syntax:
-
-\lstinline|[capture](parameters) -> return_type { body }|
-
-\begin{itemize}
-    \item \textbf{Capture}: Bestimmt, welche Variablen aus dem umgebenden Kontext verwendet werden können.
-    \begin{itemize}
-        \item \lstinline|[]|: Keine Variablen werden erfasst.
-        \item \lstinline|[=] / [&]|: Alle Variablen werden per Wert / Ref. erfasst.
-        \item \lstinline|[x, &y]|: Variable \lstinline|x| per Wert \lstinline|y| per Referenz.
-    \end{itemize}
-\end{itemize}
 
 \section{Iteratoren}
 Benötigt \lstinline|#include <vector>|. 
@@ -276,57 +256,6 @@ Iteratoren sind Objekte, die verwendet werden, um über die Elemente eines Conta
     \item \lstinline|std::distance(it1, it2)|: Abstand zwischen zwei Iteratoren
 \end{itemize}
 
-
- \section{Datenstrukturen Methoden}
-\noindent
-\begin{tabularx}{\linewidth}{l l >{\RaggedRight}X}
-\toprule
-\textbf{Typ} & \textbf{Methode} & \textbf{DT} \\
-\midrule
-v, l, q, s, m & \lstinline|.size()| & size\_t \\
-v, l, q, s, m & \lstinline|.empty()| & bool \\
-v, l, q & \lstinline|.front()/back()| & T \\
-v, l, q& \lstinline|.push_back()/push_front()| & void \\
-v, l, q & \lstinline|.pop_back()/pop_front()| & void \\
-v, l, m & \lstinline|.begin()/end()| & it \\
-l, v & \lstinline|.insert(it,val)| & it  \\
-v, l & \lstinline|.clear()| & void \\
-s & \lstinline|.top()| & T \\
-s & \lstinline|.push()/pop()| & void \\
-l & \lstinline|.erase(it)| & it  \\
-\bottomrule
-\end{tabularx}
-
-
-
-
- \section{Nützliche std:: Funktionen}
- Benötigt \lstinline|#include <algorithm>| und \lstinline|#include <functional>|
-
- \noindent
- \begin{tabularx}{\linewidth}{l >{\RaggedRight}X}
- \toprule
- \textbf{Methode} & \textbf{Typ} \\
- \midrule
- \lstinline|std::sort(b, e)| & \lstinline|void| \\
- \lstinline|std::find(b, e, v)| & \lstinline|Iterator| \\
- \lstinline|std::reverse(b, e)| & \lstinline|void|  \\
- \lstinline|std::max(a, b)| & \lstinline|T| \\
- \lstinline|std::find_if(b, e, p)| & \lstinline|Iterator|\\
- \lstinline|std::count_if(b, e, p)| & \lstinline|int|\\
- \lstinline|std::all/any_of(b, e, p)| & \lstinline|bool| \\
- \lstinline|std::max_element(b, e)| & \lstinline|Iterator|\\
-
- \bottomrule
- \end{tabularx}
-
- \begin{itemize}
-     \item \lstinline|b| = \lstinline|begin()|, \lstinline|e| = \lstinline|end()|
-     \item \lstinline|p| = Prädikat (Funktion, die bool zurückgibt) z.B. \lstinline|[](int x){return x>5;}|
-     \item \lstinline|v| = Wert, der gesucht wird
-     \item \lstinline|d| = Zieliterator (z.B. Anfang eines anderen Containers)
-     \item \lstinline|f| = Funktion, die auf jedes Element angewendet wird (z.B. \lstinline|[](int x){return x*2;}|)
- \end{itemize}
 
 \section{Konventionen}
 
@@ -354,6 +283,15 @@ l & \lstinline|.erase(it)| & it  \\
    \end{itemize}
    \item \datastruct{Final}: Mit \lstinline|final| kann verhindert werden, dass eine Klasse weiter vererbt wird oder eine Methode überschrieben wird.
 \end{itemize}
+
+\section{Überladen von Funktionen}
+
+\begin{itemize}
+    \item \textbf{Eindeutige interne Namensvergabe:} Der C++-Compiler weist jeder überladenen Funktion intern einen einzigartigen Namen zu.
+    \item \textbf{Name Mangling zur Signaturkodierung:} Dieser Prozess, kodiert die Anzahl und die Typen der Funktionsparameter direkt in diesen internen Namen.
+    \item \textbf{Präzise Zuordnung durch den Linker:} Der Linker verwendet ausschließlich diese eindeutigen, modifizierten Namen, um jeden Funktionsaufruf fehlerfrei der korrekten Implementierung zuzuordnen.
+\end{itemize}
+
 
 \section{Smart Pointer}
 
@@ -701,6 +639,7 @@ sicherheitsrelevante Aktion ausführt.
 \endgroup
 
 \algo{Fehler vs. Ausfall}: Fehler = Abweichung von der Norm. Ausfall = Fehler, der zu einem Systemausfall führt.
+\algo{Safety vs. Security}: Safety = Schutz vor Unfällen. Security = Schutz vor böswilligen Angriffen.
 
 \end{multicols*}
 \end{document}
